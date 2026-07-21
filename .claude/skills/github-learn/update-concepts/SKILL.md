@@ -41,19 +41,19 @@ description: Given today's (repo, concept_tags) batch, upsert concepts/*.md — 
    ```
    交給 `daily-digest`。
 
-## 新 concept 頁模板
+## 新概念頁模板
 
-`concepts/<slug>.md`:
+`concepts/<slug>.md`（**所有 section header 用中文**）:
 ```markdown
 # <human-friendly title>
 
 > Concept slug: `<slug>`
-> 累加自跨 repo 分析。
+> 累加自跨專案分析。
 
 ## 定義
 <一句話定義 + 為什麼值得抽出來>
 
-## 各 repo 做法對比
+## 各專案做法對比
 
 <!-- +YYYY-MM-DD from owner__repo -->
 ### owner/repo 的做法
@@ -64,13 +64,13 @@ description: Given today's (repo, concept_tags) batch, upsert concepts/*.md — 
 ## 開放問題
 - ...
 
-## 來源 repos
+## 來源專案
 - [owner/repo](../repos/owner__repo.md) — YYYY-MM-DD
 ```
 
 ## Append 模板（既有頁）
 
-在「## 各 repo 做法對比」段末尾 append：
+在「## 各專案做法對比」段末尾 append：
 ```markdown
 
 <!-- +YYYY-MM-DD from owner__repo -->
@@ -80,7 +80,7 @@ description: Given today's (repo, concept_tags) batch, upsert concepts/*.md — 
 - 適用場景：...
 ```
 
-在「## 來源 repos」清單 append：
+在「## 來源專案」清單 append：
 ```
 - [owner/repo](../repos/owner__repo.md) — YYYY-MM-DD
 ```
