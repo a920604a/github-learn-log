@@ -17,40 +17,42 @@ description: Write daily/YYYY-MM-DD.md with 1-2 repo cards, append to Home.md in
 
 ### 1. 寫 `daily/<today>.md`
 
+**所有 section header 必須用中文**（本專案 wiki 展示語言為繁體中文）。
+
 ```markdown
 # 日報 <today>
 
-> 本日分析 <N> 個 repo。
+> 本日分析 <N> 個專案。
 
-## Repos
+## 本日專案
 
 ### [owner/repo](../repos/owner__repo.md)
 - 一句話：<from analyze-repo one_liner>
-- Bullet 1（LLM 從 repos/<name>.md 抽 3 個要點）
-- Bullet 2
-- Bullet 3
+- 要點 1（LLM 從 repos/<name>.md 抽 3 個要點）
+- 要點 2
+- 要點 3
 
-（每個 repo 一段；若 N=0 改印：`> 今日 shortlist 不足，未新增 repo。`）
+（每個專案一段；若 N=0 改印：`> 今日候選不足，未新增專案。`）
 
-## Concept 更新
+## 概念更新
 - 新增：`slug-a`, `slug-b`（若無則印「無」）
 - 更新：`slug-c`（若無則印「無」）
-- Pending（等下次觸及開頁）：`slug-d`（若無則省略此列）
+- 待累加（下次觸及再開頁）：`slug-d`（若無則省略此列）
 ```
 
 ### 2. 更新 `Home.md`
 
 找到「### 日報」段，最上方 append 一列：
 ```
-- [YYYY-MM-DD](daily/YYYY-MM-DD.md) — N repo
+- [YYYY-MM-DD](daily/YYYY-MM-DD.md) — <N> 個專案
 ```
 
-找到「### Repos」段，為本日每個 repo append：
+找到「### 專案（Repos）」段，為本日每個專案 append：
 ```
-- [owner/repo](repos/owner__repo.md)
+- [owner/repo](repos/owner__repo.md) — YYYY-MM-DD
 ```
 
-若新 repo 有新 topic 尚未在「## 分類 tag」段 → 補進去。
+若新專案有新 topic 尚未在「## 分類標籤」段 → 補進去。
 
 ### 3. 構造 Discord daily payload（暫存為變數，供推播步驟用）
 

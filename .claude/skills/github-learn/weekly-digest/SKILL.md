@@ -53,37 +53,39 @@ grep -l "<!-- +${week_start}" concepts/*.md 2>/dev/null
 
 ### 3. 寫 `weekly/<week_id>.md`
 
+**所有 section header 必須用中文。**
+
 ```markdown
 # 週報 <week_id> (<week_start> ~ <week_end>)
 
-> 本週 <N> 個 repo。
+> 本週 <N> 個專案。
 
 ## 本週主軸
-<LLM 依 N 個 repo 的共通性寫一句話，例：「本週 3 個 RAG framework，chunking 策略取捨不同」>
+<LLM 依 N 個專案的共通性寫一句話，例：「本週 3 個 RAG framework，chunking 策略取捨不同」>
 
-## Repos 總覽
+## 本週專案總覽
 
 ### [owner/repo1](../repos/owner__repo1.md)
-（每個 repo 一張卡片，複製 daily 卡片格式，末尾 link 到當日 daily：`— from [YYYY-MM-DD](../daily/YYYY-MM-DD.md)`）
+（每個專案一張卡片，複製 daily 卡片格式，末尾 link 到當日 daily：`— 來自 [YYYY-MM-DD](../daily/YYYY-MM-DD.md)`）
 
 ## 橫向比較
 
-<對每個「本週 >=2 個 repo 觸及」的 concept 產一個表>
+<對每個「本週 >=2 個專案觸及」的概念產一個表>
 
-### Concept: [rag-chunking-strategies](../concepts/rag-chunking-strategies.md)
+### 概念：[rag-chunking-strategies](../concepts/rag-chunking-strategies.md)
 
-| Repo | 核心取捨 | 資料模型 | 適用場景 |
+| 專案 | 核心取捨 | 資料模型 | 適用場景 |
 |---|---|---|---|
 | owner/repo1 | ... | ... | ... |
 | owner/repo2 | ... | ... | ... |
 
-（只有 1 個 repo 的 concept 不列表）
+（只有 1 個專案的概念不列表）
 
-## Concept 頁本週更新
+## 本週概念更新
 - `slug-a`（新增）
-- `slug-c`（append）
+- `slug-c`（累加）
 
-## 相關 daily
+## 相關日報
 - [YYYY-MM-DD](../daily/YYYY-MM-DD.md)
 - ...
 ```
@@ -92,7 +94,7 @@ grep -l "<!-- +${week_start}" concepts/*.md 2>/dev/null
 
 找到「### 週報」段，最上方 append：
 ```
-- [YYYY-Www](weekly/YYYY-Www.md) — <N> repo
+- [YYYY-Www](weekly/YYYY-Www.md) — <N> 個專案
 ```
 
 ### 5. 構造 Discord weekly payload

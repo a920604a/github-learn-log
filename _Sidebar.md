@@ -1,6 +1,6 @@
-- [Home](Home.md)
-- [Glossary](glossary.md)
-- Daily
-- Weekly
-- Repos
-- Concepts
+- [首頁](Home.md)
+- [詞彙表](glossary.md)
+- 日報
+- 週報
+- 專案（Repos）
+- 概念（Concepts）

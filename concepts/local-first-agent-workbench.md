@@ -7,7 +7,7 @@
 
 Agent 執行環境 / workbench 綁本機（`127.0.0.1` 或 XDG 目錄），連 provider / 外部 DB 走 outbound；**沒有 remote mode**、沒有雲端 auth / multi-tenant 概念。所有 session、artifact、credential 落地本機。值得抽出來，是因為它是「開源 agent 產品」和「SaaS agent 產品」的**架構分水嶺** — 一旦選了 local-first，很多子決策（無 session server、無 remote share model、無 auth）就都跟著定。
 
-## 各 repo 做法對比
+## 各專案做法對比
 
 <!-- +2026-07-21 from synthetic-sciences__openscience -->
 ### synthetic-sciences/openscience 的做法
@@ -27,7 +27,7 @@ Agent 執行環境 / workbench 綁本機（`127.0.0.1` 或 XDG 目錄），連 p
 - Provider metadata 該 cache 到多新？openscience 選 `models.dev` + snapshot fallback，是可 sync 但可 offline 的漂亮妥協。
 - Skill / memory 的 gate 該多嚴？Agentlas 走「預設 off、curator 開」極端側；openscience 讓 skill on-demand load 但沒 promotion gate。
 
-## 來源 repos
+## 來源專案
 
 - [synthetic-sciences/openscience](../repos/synthetic-sciences__openscience.md) — 2026-07-21
 - [agentlas-ai/Agentlas-OS](../repos/agentlas-ai__Agentlas-OS.md) — 2026-07-21
