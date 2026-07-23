@@ -1,0 +1,76 @@
+site_name: github-learn-log
+site_description: 個人資料庫：GitHub trending 專案的架構 / 資料設計學習軌跡
+site_url: https://github-learn-log.pages.dev/
+repo_url: https://github.com/a920604a/github-learn-log
+repo_name: a920604a/github-learn-log
+edit_uri: edit/main/
+
+docs_dir: _docs
+site_dir: site
+
+theme:
+  name: material
+  language: zh-TW
+  features:
+    - navigation.sections
+    - navigation.top
+    - navigation.tracking
+    - navigation.indexes
+    - toc.integrate
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.action.edit
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: teal
+      accent: teal
+      toggle:
+        icon: material/brightness-7
+        name: 切換深色模式
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: teal
+      accent: teal
+      toggle:
+        icon: material/brightness-4
+        name: 切換淺色模式
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - def_list
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.details
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+
+plugins:
+  - search
+  - awesome-pages
+
+exclude_docs: |
+  raw/
+  .claude/
+  .github/
+  docs/
+  CLAUDE.md
+  MEMORY.md
+  README.md
+  requirements.txt
+  mkdocs.yml
+  site/
+  node_modules/
+  .git/
+  .venv/
+  __pycache__/

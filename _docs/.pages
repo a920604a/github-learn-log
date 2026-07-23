@@ -1,0 +1,8 @@
+nav:
+  - 首頁: index.md
+  - 本站索引: Home.md
+  - daily
+  - weekly
+  - repos
+  - concepts
+  - 詞彙表: glossary.md
