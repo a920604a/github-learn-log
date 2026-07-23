@@ -13,14 +13,13 @@
 ```mermaid
 flowchart TB
   subgraph Automation["自動化層（每日 08:02 Asia/Taipei）"]
-    GHA[".github/workflows/daily-ingest.yml<br/>GitHub Actions<br/>cron: 2 0 * * * UTC"]
-    Claude["Claude CLI @ ubuntu-latest<br/>claude-opus-4-8"]
-    GHA -->|注入 secrets：<br/>ANTHROPIC_API_KEY<br/>DISCORD_WEBHOOK_URL| Claude
+    Cron["Claude Code Remote Routine<br/>trig_01HYQVK4tnG6WhkSPMHNPGcj<br/>cron: 0 0 * * * UTC"]
+    Agent["Remote CCR Agent<br/>claude-opus-4-8"]
+    Cron -->|觸發| Agent
   end
 
   subgraph Repo["GitHub Repo（source of truth）"]
     Schema["CLAUDE.md<br/>（wiki schema）"]
-    Prompt[".github/pipeline-prompt.md<br/>（ingest prompt）"]
     Skills[".claude/skills/github-learn/*/SKILL.md<br/>（5 支 ingest skill）"]
     RawDir["raw/*.md<br/>（原料快取，不 publish）"]
     Wiki["repos/ concepts/<br/>daily/ weekly/<br/>Home.md glossary.md<br/>（wiki 內容）"]
@@ -32,12 +31,13 @@ flowchart TB
     Discord["Discord Channel<br/>via Webhook"]
   end
 
-  Claude -->|1. cat CLAUDE.md<br/>2. 讀 5 支 SKILL<br/>3. curl GitHub API| Repo
-  Claude -->|4. 寫 raw/ + repos/<br/>+ concepts/ + daily/| Repo
-  GHA -->|5. git commit + push origin main<br/>用 GITHUB_TOKEN| Repo
-  Repo -->|push 觸發 webhook| CF
-  Claude -->|curl POST| Discord
+  Agent -->|1. cat CLAUDE.md<br/>2. 讀 5 支 SKILL<br/>3. curl GitHub API| Repo
+  Agent -->|4. 寫 raw/ + repos/<br/>+ concepts/ + daily/<br/>5. git commit + push| Repo
+  Repo -->|webhook push 觸發| CF
+  Agent -->|curl POST| Discord
 ```
+
+> ⚠️ **實際狀況（2026-07-23 驗證）**：Claude Code Remote Routine sandbox egress 政策封鎖所有外部 HTTPS（git push / api.github.com / discord.com 皆 403），這個架構圖代表**理想 flow**，實際 routine fire 後全部 403、wiki 不會更新。詳見文末「已知洞」。
 
 ## 資料流
 
@@ -86,19 +86,17 @@ flowchart LR
 
 ## 主要組件
 
-### 1. GitHub Actions（自動化引擎）
+### 1. Claude Code Remote Routine（自動化引擎）
 
-- **Workflow**：[`.github/workflows/daily-ingest.yml`](.github/workflows/daily-ingest.yml)
-- **Prompt**：[`.github/pipeline-prompt.md`](.github/pipeline-prompt.md)（獨立檔好維護）
-- **Cron**：`2 0 * * *` UTC = 每日 08:02 Asia/Taipei
-- **執行環境**：`ubuntu-latest` runner，`@anthropic-ai/claude-code` CLI 執行 `claude-opus-4-8`
-- **手動觸發**：`gh workflow run daily-ingest.yml` 或 GitHub UI Actions tab
-- **Secrets**：
-  - `ANTHROPIC_API_KEY` — Anthropic API 認證，Claude CLI 用
-  - `DISCORD_WEBHOOK_URL` — Discord 推播目標
-  - Push 用 `GITHUB_TOKEN`（GH Actions 內建，不需另存）
+- **Routine ID**：`trig_01HYQVK4tnG6WhkSPMHNPGcj`
+- **Cron**：`0 0 * * *` UTC = 每日 08:02 Asia/Taipei
+- **執行環境**：Anthropic cloud CCR，`claude-opus-4-8`
+- **管理**：<https://claude.ai/code/routines/trig_01HYQVK4tnG6WhkSPMHNPGcj>
+- **權限依賴**：
+  - Push GitHub：透過 fine-grained PAT + REST API git-data endpoint（sources[].authorization_token + prompt env `GITHUB_TOKEN`）
+  - Push Discord：透過 webhook URL，注入 routine prompt 的 `DISCORD_WEBHOOK_URL` env
 
-> **歷史**：本專案原設計走 Claude Code Remote Routine（`trig_01HYQVK4tnG6WhkSPMHNPGcj`，已 `enabled: false`）。2026-07-23 發現該 routine sandbox egress 政策全封（scan / push / discord.com 皆 403），改遷 GH Actions。
+> ⚠️ **實際狀況**：2026-07-23 認清 routine sandbox egress 全封（`git push`、`api.github.com`、`discord.com` 全 403）。routine 目前 `enabled: true` 但每日 fire 後**沒有任何實際輸出** — 是一個「等 Anthropic 未來放寬 sandbox」的 placeholder。想更新 wiki 目前**只能本地手動用 Claude Code CLI 跑同一個 prompt**。
 
 ### 2. Ingest Skills（5 支）
 
