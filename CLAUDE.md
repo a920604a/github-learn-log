@@ -38,8 +38,17 @@
 ## 寫作風格（repos/）
 - 鐵人日誌口吻，第一人稱「我」
 - 800–1000 字（中文；`wc -m` 驗證）
-- 必含區塊：前言 / 系統架構（mermaid）/ 資料設計 / 為什麼這樣做 / 我能學到 / 重造難度
+- 必含區塊：前言 / 系統架構（mermaid）/ 資料設計 / 為什麼這樣做 / 我能學到 / **費曼式回顧**
 - 比喻新詞 → 同步 append 到 glossary.md
+
+### 費曼式回顧（新，取代 v1 的「重造難度」）
+主動學習套件，設計依據：史丹佛 AI 教育應用研究指出 AI 輔助能顯著提升主動學習成效；費曼學習法結合 LLM 可最大化記憶保留率。這一段裡 LLM 要扮演「你的學生」，幫助讀者暴露自己的理解漏洞。
+
+必含三個子項（每個 60–100 字）：
+
+1. **用生活比喻重講一次**：選一個日常場景（廚房做菜 / 交通塞車 / 排隊 / 便當店 / 咖啡店 / 積木 / 學校規則 …），避開技術術語（API、schema、runtime、DAG、RAG 等一律用比喻詞代替），用國中生能聽懂的話重述本專案的核心機制。
+2. **你接下來最可能誤解的 3 個地方**：LLM 站在讀者角度預測 3 個「以為 X 但實際上 Y」的常見盲點，用對照格式列出。
+3. **換你解釋（call-to-action）**：一句話邀請讀者「現在你用自己的話講一遍給朋友聽，卡在哪裡回來對照上面兩段」。
 
 ## Concept 頁累加規則
 - 新增：只有當同一模式被 ≥ 2 個 repo 觸及才開頁
@@ -63,10 +72,16 @@
 ## Discord 推播
 - 架構：Discord Webhook（HTTP POST，不透過 bot / MCP）
 - 目標 channel：`1529833934354124920`
-- Webhook URL **不 commit 到 repo**，存在遠端 routine prompt 的 `DISCORD_WEBHOOK_URL` 環境變數（透過 `RemoteTrigger update` 注入）
-- 由 daily-digest / weekly-digest SKILL step 5 / 7 呼叫 `curl POST`
-- 想關：Discord 那邊 delete webhook；或改 routine prompt 拿掉 URL
-- 想換 target：另建 webhook → `RemoteTrigger update` 換 URL 即可，不需改本 repo
+- Webhook URL **不 commit 到 repo**，存在 GitHub repo 的 Actions secret `DISCORD_WEBHOOK_URL`
+- 由 daily-digest / weekly-digest SKILL step 5 / 7 呼叫 `curl POST`（讀環境變數，GHA workflow 注入）
+- 想關：Discord 那邊 delete webhook；或 GH repo Settings → Secrets 拿掉
+- 想換 target：另建 webhook → GH Secret update 值即可，不需改本 repo
+
+## 自動化引擎
+- **主 workflow**：`.github/workflows/daily-ingest.yml`（GH Actions，cron `2 0 * * *` UTC = 08:02 Asia/Taipei）
+- **Pipeline prompt**：`.github/pipeline-prompt.md`（獨立檔）
+- **Secrets 依賴**：`ANTHROPIC_API_KEY`、`DISCORD_WEBHOOK_URL`；push 用 `GITHUB_TOKEN` (內建)
+- **停用中的 routine**：`trig_01HYQVK4tnG6WhkSPMHNPGcj`（enabled: false；歷史紀錄用；2026-07-23 遷 GHA）
 
 ## Lint 規則（v1 手動觸發；未來可加月度 routine）
 - 孤兒 concept（沒 repo link）→ 警告

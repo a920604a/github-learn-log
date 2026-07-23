@@ -13,13 +13,14 @@
 ```mermaid
 flowchart TB
   subgraph Automation["自動化層（每日 08:02 Asia/Taipei）"]
-    Cron["Claude Code Remote Routine<br/>trig_01HYQVK4tnG6WhkSPMHNPGcj<br/>cron: 0 0 * * * UTC"]
-    Agent["Remote CCR Agent<br/>claude-opus-4-8"]
-    Cron -->|觸發| Agent
+    GHA[".github/workflows/daily-ingest.yml<br/>GitHub Actions<br/>cron: 2 0 * * * UTC"]
+    Claude["Claude CLI @ ubuntu-latest<br/>claude-opus-4-8"]
+    GHA -->|注入 secrets：<br/>ANTHROPIC_API_KEY<br/>DISCORD_WEBHOOK_URL| Claude
   end
 
   subgraph Repo["GitHub Repo（source of truth）"]
     Schema["CLAUDE.md<br/>（wiki schema）"]
+    Prompt[".github/pipeline-prompt.md<br/>（ingest prompt）"]
     Skills[".claude/skills/github-learn/*/SKILL.md<br/>（5 支 ingest skill）"]
     RawDir["raw/*.md<br/>（原料快取，不 publish）"]
     Wiki["repos/ concepts/<br/>daily/ weekly/<br/>Home.md glossary.md<br/>（wiki 內容）"]
@@ -31,10 +32,11 @@ flowchart TB
     Discord["Discord Channel<br/>via Webhook"]
   end
 
-  Agent -->|1. cat CLAUDE.md<br/>2. 讀 5 支 SKILL<br/>3. curl GitHub API| Repo
-  Agent -->|4. 寫 raw/ + repos/<br/>+ concepts/ + daily/<br/>5. git commit + push| Repo
-  Repo -->|webhook push 觸發| CF
-  Agent -->|curl POST| Discord
+  Claude -->|1. cat CLAUDE.md<br/>2. 讀 5 支 SKILL<br/>3. curl GitHub API| Repo
+  Claude -->|4. 寫 raw/ + repos/<br/>+ concepts/ + daily/| Repo
+  GHA -->|5. git commit + push origin main<br/>用 GITHUB_TOKEN| Repo
+  Repo -->|push 觸發 webhook| CF
+  Claude -->|curl POST| Discord
 ```
 
 ## 資料流
@@ -84,15 +86,19 @@ flowchart LR
 
 ## 主要組件
 
-### 1. Claude Code Remote Routine（自動化引擎）
+### 1. GitHub Actions（自動化引擎）
 
-- **Routine ID**：`trig_01HYQVK4tnG6WhkSPMHNPGcj`
-- **Cron**：`0 0 * * *` UTC = 每日 08:02 Asia/Taipei
-- **執行環境**：Anthropic cloud CCR，`claude-opus-4-8`
-- **管理**：<https://claude.ai/code/routines/trig_01HYQVK4tnG6WhkSPMHNPGcj>
-- **權限**：
-  - Push GitHub：透過 fine-grained PAT（Contents R/W），注入 `sources[].git_repository.authorization_token`
-  - Push Discord：透過 webhook URL，注入 routine prompt 的 `DISCORD_WEBHOOK_URL` env
+- **Workflow**：[`.github/workflows/daily-ingest.yml`](.github/workflows/daily-ingest.yml)
+- **Prompt**：[`.github/pipeline-prompt.md`](.github/pipeline-prompt.md)（獨立檔好維護）
+- **Cron**：`2 0 * * *` UTC = 每日 08:02 Asia/Taipei
+- **執行環境**：`ubuntu-latest` runner，`@anthropic-ai/claude-code` CLI 執行 `claude-opus-4-8`
+- **手動觸發**：`gh workflow run daily-ingest.yml` 或 GitHub UI Actions tab
+- **Secrets**：
+  - `ANTHROPIC_API_KEY` — Anthropic API 認證，Claude CLI 用
+  - `DISCORD_WEBHOOK_URL` — Discord 推播目標
+  - Push 用 `GITHUB_TOKEN`（GH Actions 內建，不需另存）
+
+> **歷史**：本專案原設計走 Claude Code Remote Routine（`trig_01HYQVK4tnG6WhkSPMHNPGcj`，已 `enabled: false`）。2026-07-23 發現該 routine sandbox egress 政策全封（scan / push / discord.com 皆 403），改遷 GH Actions。
 
 ### 2. Ingest Skills（5 支）
 
@@ -126,11 +132,11 @@ Routine 執行時逐一讀取 `.claude/skills/github-learn/*/SKILL.md` 當作 sp
 
 ### 5. Discord 推播
 
-- **架構**：Discord Webhook（HTTP POST，不透過 bot / MCP，因為 remote routine 無 Discord plugin）
+- **架構**：Discord Webhook（HTTP POST）
 - **Target channel**：`1529833934354124920`
-- **Webhook URL**：**不 commit 到 repo**，存在 routine prompt 的 `DISCORD_WEBHOOK_URL` env
+- **Webhook URL**：**不 commit 到 repo**，存在 GitHub Actions secret `DISCORD_WEBHOOK_URL`
 - **內容格式**：日報 / 週報卡片 + Pages URL
-- **想關**：Discord 設定 → delete webhook；或改 routine prompt 拿掉 URL
+- **想關**：Discord 設定 → delete webhook；或 GH repo Settings 拿掉 secret
 
 ---
 
@@ -181,15 +187,20 @@ github-learn-log/
 
 ### 每日自動
 
-Routine 每天 08:02 Asia/Taipei 自動觸發，走完 scan → analyze → update-concepts → daily-digest → commit + push → Discord push。**你什麼都不用做**。
+GH Actions workflow 每天 08:02 Asia/Taipei 自動觸發，走完 scan → analyze → update-concepts → daily-digest → commit + push → Discord push。**你什麼都不用做**。看執行紀錄：GitHub repo → **Actions** tab → 選 workflow「Daily GitHub Learn Ingest」。
 
 ### 手動觸發
 
 想立刻跑一次而不等 cron：
 
 ```bash
-# 需要 Anthropic OAuth token；透過 /schedule 或 RemoteTrigger tool
-# 或到 UI 手動點：https://claude.ai/code/routines/trig_01HYQVK4tnG6WhkSPMHNPGcj
+# 用 gh CLI
+gh workflow run daily-ingest.yml
+
+# 或帶 dry_run（不 commit / 不推 Discord，除錯用）
+gh workflow run daily-ingest.yml -f dry_run=true
+
+# 也可以 GitHub UI → Actions → Daily GitHub Learn Ingest → Run workflow
 ```
 
 ### 本地開發
@@ -220,7 +231,7 @@ python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
 
 （狀態 2026-07-23）
 
-- ⚠️ **遠端 routine push 不穩**：2026-07-22 首次自動觸發沒 push；設 PAT 後 2026-07-23 觸發仍沒 push。原因排查中（PAT 未生效 / agent 中途 crash / branch 錯位可能）。
 - **Home.md 排版待美化**（MkDocs 渲染尚未精修）
 - **中文搜尋弱**：MkDocs 內建 Lunr 對中文分詞不佳；未來若嫌難用可考慮遷 Astro Starlight (Pagefind)
 - **Lint routine 尚未做**（孤兒 concept / 過期 concept / 斷鏈警告；spec §5 已定義規則）
+- **GHA workflow 尚未實跑驗證**（cron `2 0 * * *` UTC + manual `gh workflow run` 待首次觸發）

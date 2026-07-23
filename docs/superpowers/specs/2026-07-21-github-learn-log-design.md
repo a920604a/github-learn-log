@@ -1,10 +1,33 @@
 # github-learn-log — 設計文件
 
 - **日期**: 2026-07-21
-- **狀態**: Draft (待實作)
+- **狀態**: Draft (待實作) → **v2 partial revision 2026-07-23**（自動化引擎改動，見下方 sunset banner）
 - **Owner**: chenyuan (a920604a)
 - **Remote**: https://github.com/a920604a/github-learn-log
 - **Local**: /Users/chenyuan/Desktop/side-projects/github-learn-log
+
+---
+
+> ## 🚨 【2026-07-23 v2 更新】自動化引擎已改
+>
+> 本 spec 原設計自動化引擎為 **Claude Code Remote Routine**（`trig_01HYQVK4tnG6WhkSPMHNPGcj`，透過 `/schedule` skill 建立）。**2026-07-23 首次自動觸發時發現該 routine sandbox egress policy 全封**：
+> - `git push` 被 Anthropic managed git proxy 阻擋（receive-pack 回 403）
+> - REST API 繞路（curl `api.github.com`）也 403：`GitHub access is not enabled for this session`
+> - GitHub MCP `push_files` 也 403：`Resource not accessible by integration`
+> - Discord webhook 也 403 CONNECT tunnel
+>
+> **結論：Claude Code Routine 不能拿來做「碰外部服務 / 寫 GitHub」的自動化**。已把該 routine `enabled: false`。
+>
+> **新自動化架構**：GitHub Actions
+> - Workflow: `.github/workflows/daily-ingest.yml`
+> - Pipeline prompt: `.github/pipeline-prompt.md`（獨立檔）
+> - Runner: `ubuntu-latest` 裝 `@anthropic-ai/claude-code` CLI
+> - Cron: `2 0 * * *` UTC = 08:02 Asia/Taipei（原 spec §6 定為 20:00 Asia/Taipei，v2 早上 08:02，跟原本規劃錯開，讓每天早上開電腦有得看）
+> - Secrets: `ANTHROPIC_API_KEY`、`DISCORD_WEBHOOK_URL`（push 用 GH Actions 內建 `GITHUB_TOKEN`）
+>
+> **本 spec 下文中的 §6「Routine 設置」、§8「錯誤處理與邊界」關於 routine 的描述、§9「開放問題」的 routine-related 問題，都以 v2 的 GH Actions 為準；此處保留原 v1 文字作為設計 rationale 的完整快照，不重寫歷史**。SoT 現在是：`README.md` § 自動化引擎 + `.github/workflows/daily-ingest.yml` + `CLAUDE.md` § 自動化引擎。
+>
+> **另一個 v2 變更**：repos/ 6 段結構的最後一段從「重造難度」改為「費曼式回顧」（生活比喻 + 3 個常見盲點「以為 X 但實際上 Y」 + 換你解釋）— 依據史丹佛 AI 教育應用研究與費曼學習法結合 LLM 可最大化記憶保留率的研究；本 spec 下文中的 6-section 列表已同步替換。
 
 ## 1. 目的
 
@@ -112,7 +135,7 @@ git commit + push + Discord 週報推播
   3. 依 CLAUDE.md 寫作規則產出 `repos/<repo>.md`：
      - 鐵人日誌口吻，第一人稱「我」
      - 800–1000 字，技術 + 比喻雙軌交錯
-     - 必含區塊：**前言 / 系統架構（mermaid） / 資料設計 / 為什麼這樣做 / 我能學到 / 重造難度**
+     - 必含區塊：**前言 / 系統架構（mermaid） / 資料設計 / 為什麼這樣做 / 我能學到 / 費曼式回顧**
      - 至少 link 2 個 concept
   4. 產出 concept tags list（交給 update-concepts）
 - **輸出**：`repos/<repo>.md` + concept tags
@@ -173,7 +196,7 @@ git commit + push + Discord 週報推播
 ## 寫作風格（repos/）
 - 鐵人日誌口吻，第一人稱「我」
 - 800–1000 字，技術 + 比喻雙軌交錯
-- 必含區塊：前言 / 系統架構（mermaid）/ 資料設計 / 為什麼這樣做 / 我能學到 / 重造難度
+- 必含區塊：前言 / 系統架構（mermaid）/ 資料設計 / 為什麼這樣做 / 我能學到 / 費曼式回顧
 - 比喻新詞 → 同步更新 glossary.md
 
 ## Concept 頁累加規則

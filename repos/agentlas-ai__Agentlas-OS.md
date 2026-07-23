@@ -49,6 +49,18 @@ Canonical core 只有 markdown + JSON contract — **runtime-neutral**。每個 
 2. **Skill lifecycle registry**（[[skill-lifecycle-promotion]]）— skill 不是「寫完就能用」，而是要走 trial evidence + curator decision，這比我單純用 flag 開關 skill 嚴謹很多。
 3. **`unsupported_pending_adapter` 這種明確 fail 標記** — 比「靜默 skip」或「拋 exception」都好，是 future work backlog 的 in-place 標記。
 
-## 重造難度
+## 費曼式回顧
 
-**5/5** — 25+ 個 ontology 維度光是把每個 contract 想清楚就要幾個月；ontology runtime 涉及 SQLite + FTS5 + local vector + GraphRAG 至少要 2–3 週末。週末只能重造「三個 meta-agent 的 mode-classifier + clarify-question-loop」這個薄 slice。阻力點：super-ontology 每個維度的判準不明確，需要領域 taste。
+### 用生活比喻重講一次
+
+想像一家便當店，每道菜（agent）都夾著一張手寫食譜卡（agent card）— 寫食材、步驟、幾分熟。特別的地方是這張卡**不指定要用哪種爐子**：拿到瓦斯爐、電磁爐、微波爐都能照著做，因為卡上只寫「加熱到 80 度」而不是「開中火 3 分鐘」。廚房另外掛一本厚厚的品管手冊（super-ontology），規定每張卡出貨前要填 25 個欄位：試吃過幾次？誰簽的名？失敗過幾次？沒填完的卡不准放進便當盒。
+
+### 你接下來最可能誤解的 3 個地方
+
+1. **以為 runtime-neutral = write once run anywhere，但實際上**每個爐子（runtime）還是要**手寫一小段翻譯**（adapter），只是薄。食譜卡不會告訴瓦斯爐怎麼點火，但點火那段程式碼還是要寫。
+2. **以為 super-ontology 那 25+ 維度是 AI 自動長出來的 metadata，但實際上**這是**人類坐下來設計出的品管維度清單**，AI 只是負責填欄位。這份手冊本身才是這個專案最花心力的成果。
+3. **以為 skill lifecycle 只是加一個「開 / 關」開關，但實際上**它硬插了「試用階段」在中間 — candidate（技能剛冒出來）→ trial（在沙盒被觀察）→ curator（人類點頭放行），三段是**三個獨立審核關卡**，不是同一個決定的三個 checkbox。
+
+### 換你解釋
+
+現在用你自己的話講給朋友：「這個專案為什麼堅持食譜卡不寫爐子，卻要 25 個欄位的品管手冊？」講到卡住的地方，回來對照上面兩段。

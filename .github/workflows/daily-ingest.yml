@@ -1,0 +1,76 @@
+name: Daily GitHub Learn Ingest
+
+on:
+  schedule:
+    # 00:02 UTC = 08:02 Asia/Taipei
+    - cron: '2 0 * * *'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: '不 commit push 也不推 Discord（除錯用）'
+        required: false
+        default: 'false'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: daily-ingest
+  cancel-in-progress: false
+
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          persist-credentials: true
+
+      - name: Setup Node.js (for claude CLI)
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Claude Code CLI
+        run: |
+          npm install -g @anthropic-ai/claude-code
+          claude --version
+
+      - name: Configure git identity
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Run ingest pipeline
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
+        run: |
+          # 讀 pipeline prompt 從獨立檔（好維護、diff 清楚）
+          PROMPT=$(cat .github/pipeline-prompt.md)
+          claude --print --dangerously-skip-permissions "$PROMPT"
+
+      - name: Commit and push changes
+        if: ${{ github.event.inputs.dry_run != 'true' }}
+        run: |
+          if [ -z "$(git status --porcelain)" ]; then
+            echo "No changes; nothing to commit."
+            exit 0
+          fi
+          git add raw/ repos/ concepts/ daily/ weekly/ Home.md glossary.md 2>/dev/null || true
+          git status --porcelain
+          git commit -m "chore(daily): $(date +%Y-%m-%d) — automated ingest"
+          git push origin main
+
+      - name: Report on dry run
+        if: ${{ github.event.inputs.dry_run == 'true' }}
+        run: |
+          echo "=== DRY RUN — 未 commit ==="
+          git status
+          echo "=== 修改 diff ==="
+          git diff --stat

@@ -2,6 +2,16 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
+---
+
+> ## 🚨 【2026-07-23 v2 更新】Task 11 已被 GitHub Actions 取代
+>
+> 本 plan 的 Task 11「Cron routine 設置」原本走 Claude Code `/schedule` skill 建 remote routine（`trig_01HYQVK4tnG6WhkSPMHNPGcj`）。**2026-07-23 首次自動觸發時發現該 routine sandbox 全封所有寫入 / 外部存取路徑（git push / api.github.com / discord.com 皆 403）**，該 routine 已 `enabled: false`。
+>
+> **取代**：`.github/workflows/daily-ingest.yml` + `.github/pipeline-prompt.md`（詳細變更歷程見 spec 頂端 v2 banner）。本 plan 下文中所有「Claude Code routine」/「`/schedule` skill」的實作段落改讀 `.github/workflows/daily-ingest.yml` 為準；保留原 Task 11 描述做設計 rationale 快照。
+>
+> **另外**：本 plan 提及的 6-section 結構「重造難度」全部改為「費曼式回顧」（生活比喻 + 3 個常見盲點「以為 X 但實際上 Y」 + 換你解釋）。字串替換已完成。
+
 **Goal:** 建立 github-learn-log 個人 wiki：每日 routine 自動選 1–2 個 GitHub trending repo 深度分析、寫入 markdown wiki、更新 concept 累加頁、產出日/週報，並經 Cloudflare Pages 靜態網站瀏覽 + Discord 推播。
 
 **Architecture:** Karpathy llm_wiki 三層 (Raw sources / Wiki / Schema)。實作面：`.claude/skills/github-learn/*` 五支 skill 由 Claude Code routine 串起（scan → analyze → update-concepts → daily-digest；週日多跑 weekly-digest）。Wiki 內容為純 markdown，`main` push 觸發 Cloudflare Pages 用 MkDocs Material 建站。Discord 推播使用專案既有 `discord:configure` 流程。
@@ -23,7 +33,7 @@
 - **Repo 去重**：`scan-trending` 必須排除已在 `repos/<name>.md` 存在的 repo。
 - **Concept 開頁門檻**：同一 concept 被 ≥ 2 個 repo 觸及才開新頁。
 - **Concept 更新**：不覆寫，只 append；每次更新加日期戳 `<!-- +YYYY-MM-DD from <repo> -->`。
-- **repos/ 寫作規範**：鐵人日誌口吻、第一人稱「我」、800–1000 字、必含區塊（前言/系統架構 mermaid/資料設計/為什麼這樣做/我能學到/重造難度）、至少 link 2 個 concept。
+- **repos/ 寫作規範**：鐵人日誌口吻、第一人稱「我」、800–1000 字、必含區塊（前言/系統架構 mermaid/資料設計/為什麼這樣做/我能學到/費曼式回顧）、至少 link 2 個 concept。
 - **Cloudflare Pages 產物路徑**：`site/`；build command `pip install -r requirements.txt && mkdocs build`；不 publish `raw/`。
 - **Discord**：使用專案既有 `discord:configure` 流程；連結一律用 Cloudflare Pages URL。
 - **Commit**：小步提交；prefix 用 `feat:` / `chore:` / `docs:` / `refactor:`；每個 task 至少一次 commit。
@@ -109,7 +119,7 @@ Content:
 ## 寫作風格（repos/）
 - 鐵人日誌口吻，第一人稱「我」
 - 800–1000 字，技術 + 比喻雙軌交錯
-- 必含區塊：前言 / 系統架構（mermaid）/ 資料設計 / 為什麼這樣做 / 我能學到 / 重造難度
+- 必含區塊：前言 / 系統架構（mermaid）/ 資料設計 / 為什麼這樣做 / 我能學到 / 費曼式回顧
 - 比喻新詞 → 同步更新 glossary.md
 
 ## Concept 頁累加規則
@@ -390,7 +400,7 @@ description: Deep-analyze one GitHub repo per CLAUDE.md rules — write raw cach
      - `## 資料設計`（表 schema / 儲存格式 / 流動）
      - `## 為什麼這樣做`（設計取捨）
      - `## 我能學到`（帶回自己專案的具體收穫）
-     - `## 重造難度`（週末可重造程度 1–5 + 阻力點）
+     - `## 費曼式回顧`（生活比喻 + 3 個常見盲點「以為 X 但實際上 Y」 + 換你解釋）
    - 字數：800–1000（中文計字，可用 `wc -m` 驗證）
    - **至少 link 2 個 concept**：在文中用 `[[concept-slug]]` 形式標記（例：`用了 [[rag-chunking-strategies|semantic chunking]]`）；即使 concept 頁尚未建立也先標，等 `update-concepts` 補
    - 出現新比喻 → append 一 row 到 `glossary.md`
@@ -970,7 +980,7 @@ Run:
 ```bash
 cd /Users/chenyuan/Desktop/side-projects/github-learn-log && \
 echo "--- word count ---" && wc -m repos/karpathy__nanoGPT.md && \
-echo "--- 必含區塊 ---" && grep -E '^## (前言|系統架構|資料設計|為什麼這樣做|我能學到|重造難度)' repos/karpathy__nanoGPT.md && \
+echo "--- 必含區塊 ---" && grep -E '^## (前言|系統架構|資料設計|為什麼這樣做|我能學到|費曼式回顧)' repos/karpathy__nanoGPT.md && \
 echo "--- mermaid ---" && grep -c '```mermaid' repos/karpathy__nanoGPT.md && \
 echo "--- concept links ---" && grep -oE '\[\[[a-z-]+' repos/karpathy__nanoGPT.md | sort -u
 ```

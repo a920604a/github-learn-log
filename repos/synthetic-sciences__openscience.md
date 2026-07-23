@@ -45,6 +45,18 @@ Session / artifacts / provenance 全落在本機 XDG 目錄（`~/.config/opensci
 
 另外看到「blind reviewer gate 在 finalize 前跑」這種設計，我以前只把 review 放在 CI，沒想過可以放在 agent runtime 內部做為 finalize step。
 
-## 重造難度
+## 費曼式回顧
 
-**5/5** — monorepo（backend/frontend/tooling），Bun native binary build pipeline，SolidJS workspace UI，SSE 事件流，75+ provider 適配器。週末重造只能挑一個 slice，例如「只做 CLI + agent runtime + 一個 provider + SSE」也要 2–3 週末。阻力點：Bun 打包成 native binary 的 tooling / SolidJS workspace 的 inline scientific viewer（分子/基因組/plot）較冷門。
+### 用生活比喻重講一次
+
+想像巷口一家獨立咖啡店（openscience）。老闆自己會煮、店裡有豆子、有咖啡機，客人**走進店裡**就能點餐。旁邊有間中央倉庫（Atlas）會定期送新豆子和新機器，但今天倉庫罷工，這家店還是照常開。這家店刻意**不接外送、不裝 Uber Eats**：只服務走進來的客人。因為不做外送，就不用處理付款系統、外送員身分、路線規劃那堆麻煩事，全部精力放在把咖啡煮好、把客人的杯子擦亮。
+
+### 你接下來最可能誤解的 3 個地方
+
+1. **以為 local-first = 不打電話出去，但實際上**這家店照樣打電話叫豆子（provider API）、照樣訂設備更新（Atlas catalog），只是**「客人來店裡」這個動作在本地發生** — 差別在「誰是主人、誰是客人」，不是「有沒有對外通訊」。
+2. **以為兩層 prompt 只是把長字串拆兩段方便管理，但實際上**它把「換咖啡機」和「換咖啡師」變成**兩個可以獨立換的軸** — 換一台新機器只需要調下層（provider prompt），換一個「懂手沖的咖啡師」→「懂拿鐵拉花的咖啡師」只需要調上層（agent prompt）。
+3. **以為「從雲端拉技能清單」和「跑源碼直接讀技能資料夾」是 production vs dev 的差別，但實際上**這兩條路對上層**看起來一模一樣** — 開發者跑源碼也照樣有完整功能，不是「debug 模式」，是**同一個抽象接兩種後端**。
+
+### 換你解釋
+
+現在用你自己的話講給朋友：「為什麼這家咖啡店寧可放棄外送客源，也要堅持 localhost only？」講到卡住的地方，回來對照上面兩段。
