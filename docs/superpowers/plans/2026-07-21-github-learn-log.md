@@ -4,13 +4,11 @@
 
 ---
 
-> ## 🚨 【2026-07-23 v2 更新】Task 11 已被 GitHub Actions 取代
+> ## 【2026-07-23 v2 更新】
 >
-> 本 plan 的 Task 11「Cron routine 設置」原本走 Claude Code `/schedule` skill 建 remote routine（`trig_01HYQVK4tnG6WhkSPMHNPGcj`）。**2026-07-23 首次自動觸發時發現該 routine sandbox 全封所有寫入 / 外部存取路徑（git push / api.github.com / discord.com 皆 403）**，該 routine 已 `enabled: false`。
+> **1. 6-section 結構調整**：本 plan 提及的 6-section 結構「重造難度」全部改為「費曼式回顧」（生活比喻 + 3 個常見盲點「以為 X 但實際上 Y」 + 換你解釋）。字串替換已完成。
 >
-> **取代**：`.github/workflows/daily-ingest.yml` + `.github/pipeline-prompt.md`（詳細變更歷程見 spec 頂端 v2 banner）。本 plan 下文中所有「Claude Code routine」/「`/schedule` skill」的實作段落改讀 `.github/workflows/daily-ingest.yml` 為準；保留原 Task 11 描述做設計 rationale 快照。
->
-> **另外**：本 plan 提及的 6-section 結構「重造難度」全部改為「費曼式回顧」（生活比喻 + 3 個常見盲點「以為 X 但實際上 Y」 + 換你解釋）。字串替換已完成。
+> **2. Task 11 現況**：Task 11「Cron routine 設置」的 routine（`trig_01HYQVK4tnG6WhkSPMHNPGcj`）2026-07-23 首次自動觸發時發現 sandbox 全封（`git push` / `api.github.com` / `discord.com` 皆 403）。routine 仍 `enabled: true` 但無實際輸出，是等 Anthropic 未來放寬 sandbox 的 placeholder；目前想更新 wiki 只能本地手動用 Claude Code CLI 跑同一個 prompt。曾評估遷 GitHub Actions 但需 pay-per-use API key，本人不做。
 
 **Goal:** 建立 github-learn-log 個人 wiki：每日 routine 自動選 1–2 個 GitHub trending repo 深度分析、寫入 markdown wiki、更新 concept 累加頁、產出日/週報，並經 Cloudflare Pages 靜態網站瀏覽 + Discord 推播。
 

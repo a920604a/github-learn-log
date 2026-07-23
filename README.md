@@ -130,11 +130,13 @@ Routine 執行時逐一讀取 `.claude/skills/github-learn/*/SKILL.md` 當作 sp
 
 ### 5. Discord 推播
 
-- **架構**：Discord Webhook（HTTP POST）
+- **架構**：Discord Webhook（HTTP POST，不透過 bot / MCP）
 - **Target channel**：`1529833934354124920`
-- **Webhook URL**：**不 commit 到 repo**，存在 GitHub Actions secret `DISCORD_WEBHOOK_URL`
+- **Webhook URL**：**不 commit 到 repo**，存在 routine prompt 的 `DISCORD_WEBHOOK_URL` env（透過 `RemoteTrigger update`）
 - **內容格式**：日報 / 週報卡片 + Pages URL
-- **想關**：Discord 設定 → delete webhook；或 GH repo Settings 拿掉 secret
+- **想關**：Discord 設定 → delete webhook；或改 routine prompt 拿掉 URL
+
+> ⚠️ 目前 routine sandbox 也擋 `discord.com` → 即使 routine 成功寫 wiki，Discord push 也會 403。與 GitHub push 同樣是 placeholder。
 
 ---
 
@@ -183,23 +185,15 @@ github-learn-log/
 
 ## 執行方式
 
-### 每日自動
+### 每日自動（**目前無效**）
 
-GH Actions workflow 每天 08:02 Asia/Taipei 自動觸發，走完 scan → analyze → update-concepts → daily-digest → commit + push → Discord push。**你什麼都不用做**。看執行紀錄：GitHub repo → **Actions** tab → 選 workflow「Daily GitHub Learn Ingest」。
+Routine 每天 08:02 Asia/Taipei 觸發但 sandbox 全封 → 0 push，wiki 不會更新。放在那當紀念。
 
-### 手動觸發
+### 本地手動跑（**目前唯一有效路徑**）
 
-想立刻跑一次而不等 cron：
+在本地開 Claude Code CLI（OAuth 免費）貼 routine prompt 進去，agent 有你的本地 gh CLI + git 環境沒 proxy 問題，會照走完 scan → analyze → update-concepts → daily-digest → commit + push → Discord push。
 
-```bash
-# 用 gh CLI
-gh workflow run daily-ingest.yml
-
-# 或帶 dry_run（不 commit / 不推 Discord，除錯用）
-gh workflow run daily-ingest.yml -f dry_run=true
-
-# 也可以 GitHub UI → Actions → Daily GitHub Learn Ingest → Run workflow
-```
+想省事的做法：把 routine prompt 存成本地 `~/bin/github-learn-run.sh`（一個 wrapper 呼 `claude` CLI），想更新的時候一個指令搞定。
 
 ### 本地開發
 
@@ -229,7 +223,7 @@ python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
 
 （狀態 2026-07-23）
 
+- ⚠️ **自動化死路（決定性洞）**：Claude Code Remote Routine sandbox egress policy 於 2026-07-23 驗證全封所有外部 HTTPS — `git push`、`api.github.com`（REST API 繞路也不行）、`discord.com` 皆回 403。routine 每日 fire 但無輸出。曾試過遷 GH Actions 但需要 API key + 用量計費，本人不做，回退 routine 架構等 Anthropic 放寬 sandbox。
 - **Home.md 排版待美化**（MkDocs 渲染尚未精修）
 - **中文搜尋弱**：MkDocs 內建 Lunr 對中文分詞不佳；未來若嫌難用可考慮遷 Astro Starlight (Pagefind)
 - **Lint routine 尚未做**（孤兒 concept / 過期 concept / 斷鏈警告；spec §5 已定義規則）
-- **GHA workflow 尚未實跑驗證**（cron `2 0 * * *` UTC + manual `gh workflow run` 待首次觸發）

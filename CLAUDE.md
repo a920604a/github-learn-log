@@ -72,16 +72,12 @@
 ## Discord 推播
 - 架構：Discord Webhook（HTTP POST，不透過 bot / MCP）
 - 目標 channel：`1529833934354124920`
-- Webhook URL **不 commit 到 repo**，存在 GitHub repo 的 Actions secret `DISCORD_WEBHOOK_URL`
-- 由 daily-digest / weekly-digest SKILL step 5 / 7 呼叫 `curl POST`（讀環境變數，GHA workflow 注入）
-- 想關：Discord 那邊 delete webhook；或 GH repo Settings → Secrets 拿掉
-- 想換 target：另建 webhook → GH Secret update 值即可，不需改本 repo
+- Webhook URL **不 commit 到 repo**，存在遠端 routine prompt 的 `DISCORD_WEBHOOK_URL` 環境變數（透過 `RemoteTrigger update` 注入）
+- 由 daily-digest / weekly-digest SKILL step 5 / 7 呼叫 `curl POST`
+- 想關：Discord 那邊 delete webhook；或改 routine prompt 拿掉 URL
+- 想換 target：另建 webhook → `RemoteTrigger update` 換 URL 即可，不需改本 repo
 
-## 自動化引擎
-- **主 workflow**：`.github/workflows/daily-ingest.yml`（GH Actions，cron `2 0 * * *` UTC = 08:02 Asia/Taipei）
-- **Pipeline prompt**：`.github/pipeline-prompt.md`（獨立檔）
-- **Secrets 依賴**：`ANTHROPIC_API_KEY`、`DISCORD_WEBHOOK_URL`；push 用 `GITHUB_TOKEN` (內建)
-- **停用中的 routine**：`trig_01HYQVK4tnG6WhkSPMHNPGcj`（enabled: false；歷史紀錄用；2026-07-23 遷 GHA）
+> ⚠️ **實際狀況（2026-07-23）**：routine sandbox 擋 `discord.com`，這條 push 走不通。設定保留待未來 Anthropic 放寬 sandbox。
 
 ## Lint 規則（v1 手動觸發；未來可加月度 routine）
 - 孤兒 concept（沒 repo link）→ 警告

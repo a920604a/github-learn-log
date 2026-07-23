@@ -1,33 +1,18 @@
 # github-learn-log — 設計文件
 
 - **日期**: 2026-07-21
-- **狀態**: Draft (待實作) → **v2 partial revision 2026-07-23**（自動化引擎改動，見下方 sunset banner）
+- **狀態**: Draft → **v2 partial revision 2026-07-23**（見下方 banner）
 - **Owner**: chenyuan (a920604a)
 - **Remote**: https://github.com/a920604a/github-learn-log
 - **Local**: /Users/chenyuan/Desktop/side-projects/github-learn-log
 
 ---
 
-> ## 🚨 【2026-07-23 v2 更新】自動化引擎已改
+> ## 【2026-07-23 v2 更新】
 >
-> 本 spec 原設計自動化引擎為 **Claude Code Remote Routine**（`trig_01HYQVK4tnG6WhkSPMHNPGcj`，透過 `/schedule` skill 建立）。**2026-07-23 首次自動觸發時發現該 routine sandbox egress policy 全封**：
-> - `git push` 被 Anthropic managed git proxy 阻擋（receive-pack 回 403）
-> - REST API 繞路（curl `api.github.com`）也 403：`GitHub access is not enabled for this session`
-> - GitHub MCP `push_files` 也 403：`Resource not accessible by integration`
-> - Discord webhook 也 403 CONNECT tunnel
+> **1. 6-section 結構調整**：repos/ 最後一段從「重造難度」改為「費曼式回顧」（生活比喻 + 3 個常見盲點「以為 X 但實際上 Y」 + 換你解釋）— 依據史丹佛 AI 教育應用研究與費曼學習法結合 LLM 可最大化記憶保留率的研究。本 spec 下文中 6-section 列表已同步替換。
 >
-> **結論：Claude Code Routine 不能拿來做「碰外部服務 / 寫 GitHub」的自動化**。已把該 routine `enabled: false`。
->
-> **新自動化架構**：GitHub Actions
-> - Workflow: `.github/workflows/daily-ingest.yml`
-> - Pipeline prompt: `.github/pipeline-prompt.md`（獨立檔）
-> - Runner: `ubuntu-latest` 裝 `@anthropic-ai/claude-code` CLI
-> - Cron: `2 0 * * *` UTC = 08:02 Asia/Taipei（原 spec §6 定為 20:00 Asia/Taipei，v2 早上 08:02，跟原本規劃錯開，讓每天早上開電腦有得看）
-> - Secrets: `ANTHROPIC_API_KEY`、`DISCORD_WEBHOOK_URL`（push 用 GH Actions 內建 `GITHUB_TOKEN`）
->
-> **本 spec 下文中的 §6「Routine 設置」、§8「錯誤處理與邊界」關於 routine 的描述、§9「開放問題」的 routine-related 問題，都以 v2 的 GH Actions 為準；此處保留原 v1 文字作為設計 rationale 的完整快照，不重寫歷史**。SoT 現在是：`README.md` § 自動化引擎 + `.github/workflows/daily-ingest.yml` + `CLAUDE.md` § 自動化引擎。
->
-> **另一個 v2 變更**：repos/ 6 段結構的最後一段從「重造難度」改為「費曼式回顧」（生活比喻 + 3 個常見盲點「以為 X 但實際上 Y」 + 換你解釋）— 依據史丹佛 AI 教育應用研究與費曼學習法結合 LLM 可最大化記憶保留率的研究；本 spec 下文中的 6-section 列表已同步替換。
+> **2. Automation 現況說明**：本 spec §6 描述的 Claude Code Remote Routine 自動化 pipeline，2026-07-23 首次自動觸發時發現該 routine sandbox egress policy 全封（`git push` / `api.github.com` REST API 繞路 / GitHub MCP `push_files` / Discord webhook 皆 403）。routine 仍保留 `enabled: true` 但**每日 fire 後無實際輸出**，是個等 Anthropic 未來放寬 sandbox 的 placeholder。目前更新 wiki 只能本地手動用 Claude Code CLI 跑同一個 prompt（走 OAuth，不碰 routine sandbox）。曾評估遷 GitHub Actions 但需 pay-per-use API key，本人不做。
 
 ## 1. 目的
 
