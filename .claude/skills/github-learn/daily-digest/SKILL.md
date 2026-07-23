@@ -84,11 +84,29 @@ git commit -m "chore(daily): <today> — <N> repos"
 git push origin main
 ```
 
-### 5. Discord push（若 chat_id 已設定）
+### 5. Discord push（webhook 模式）
 
-- 從 `CLAUDE.md` 讀「## Discord 推播設定」的 chat_id
-- 呼叫 `discord:reply` with `chat_id`, body = step 3 payload
-- 若無 chat_id 或 Discord tool 不可用 → skip 並在 log 印「Discord skipped: <reason>」
+遠端 routine 環境沒有 Discord bot / MCP，只能用 webhook POST。
+
+- 讀環境變數 `DISCORD_WEBHOOK_URL`（由 routine prompt 注入；本地執行時可能無）
+- 若未設 → skip，log 印「Discord skipped: DISCORD_WEBHOOK_URL not set」
+- 若已設：
+
+```bash
+curl -sS -X POST \
+  -H "Content-Type: application/json" \
+  -d "$(jq -n --arg content "$DAILY_PAYLOAD" '{
+    username: "github-learn-log routine",
+    content: $content
+  }')" \
+  "$DISCORD_WEBHOOK_URL"
+```
+
+其中 `$DAILY_PAYLOAD` = step 3 構造出的文本（≤ 2000 字元，超過就截斷並在末尾加「... 完整內容請看 wiki」）。
+
+**注意事項**
+- Webhook URL 是 secret，不要 echo 到 stdout / log
+- HTTP 204 = 成功；其他狀態碼要 log 錯誤但不 fail pipeline（wiki 已 commit 就好）
 
 ## 輸出
 - `daily/<today>.md`

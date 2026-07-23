@@ -53,9 +53,20 @@
 - 排除已在 `repos/` 的 repo
 - 目標：每日 1–2 個
 
-## Cloudflare Pages（可選，後續處理）
-- Build tool: MkDocs + Material（見 mkdocs.yml；目前未啟用）
+## Cloudflare Pages
+- Build tool: MkDocs + Material（見 `mkdocs.yml` / `requirements.txt`）
+- 內容來源：`_docs/` 內的 symlink 指向 root 的 `daily/` / `weekly/` / `repos/` / `concepts/` / `Home.md` / `index.md` / `glossary.md`
+- 排版控制：各子目錄的 `.pages` 檔（awesome-pages plugin）
+- 部署：CF Pages 綁 `main`，每次 push 自動 build → https://github-learn-log.pages.dev/
 - 不 publish：`raw/`（原料快取，僅內部用）
+
+## Discord 推播
+- 架構：Discord Webhook（HTTP POST，不透過 bot / MCP）
+- 目標 channel：`1529833934354124920`
+- Webhook URL **不 commit 到 repo**，存在遠端 routine prompt 的 `DISCORD_WEBHOOK_URL` 環境變數（透過 `RemoteTrigger update` 注入）
+- 由 daily-digest / weekly-digest SKILL step 5 / 7 呼叫 `curl POST`
+- 想關：Discord 那邊 delete webhook；或改 routine prompt 拿掉 URL
+- 想換 target：另建 webhook → `RemoteTrigger update` 換 URL 即可，不需改本 repo
 
 ## Lint 規則（v1 手動觸發；未來可加月度 routine）
 - 孤兒 concept（沒 repo link）→ 警告

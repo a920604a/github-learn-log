@@ -125,7 +125,9 @@ git commit -m "chore(weekly): <week_id> — <N> repos"
 git push origin main
 ```
 
-### 7. Discord push（同 daily-digest step 5）
+### 7. Discord push（webhook 模式，同 daily-digest step 5）
+
+讀 `DISCORD_WEBHOOK_URL` 環境變數；`content` 用 step 5 構造的 weekly payload。若未設 → skip。
 
 ## 輸出
 - `weekly/<week_id>.md`
