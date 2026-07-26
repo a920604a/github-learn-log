@@ -16,12 +16,17 @@
 `<owner>__<repo>`（把 `/` 換成 `__`）。例：`karpathy/nanoGPT` → `karpathy__nanoGPT`。
 
 ## Skill 位置
-所有 ingest skill 都在 `.claude/skills/github-learn/<name>/SKILL.md`。routine 執行時逐一讀取：
+所有 ingest skill 都在 `.claude/skills/github-learn/<name>/SKILL.md`。
+
+**Routine 執行時逐一讀取（日常單日 pipeline）：**
 - `.claude/skills/github-learn/scan-trending/SKILL.md`
 - `.claude/skills/github-learn/analyze-repo/SKILL.md`
 - `.claude/skills/github-learn/update-concepts/SKILL.md`
 - `.claude/skills/github-learn/daily-digest/SKILL.md`
 - `.claude/skills/github-learn/weekly-digest/SKILL.md`
+
+**本地手動觸發（補積壓 orchestrator，不由 routine 呼叫）：**
+- `.claude/skills/github-learn/catch-up-backlog/SKILL.md` — 偵測 `daily/` 缺口 → 一次補 N 天 → 一次 commit
 
 ## 交叉引用
 - repos → concepts：每個專案頁至少 link 2 個概念
