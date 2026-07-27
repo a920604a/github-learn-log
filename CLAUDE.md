@@ -18,14 +18,14 @@
 ## Skill 位置
 所有 ingest skill 都在 `.claude/skills/github-learn/<name>/SKILL.md`。
 
-**Routine 執行時逐一讀取（日常單日 pipeline）：**
+**日常單日 pipeline（本地手動依序執行）：**
 - `.claude/skills/github-learn/scan-trending/SKILL.md`
 - `.claude/skills/github-learn/analyze-repo/SKILL.md`
 - `.claude/skills/github-learn/update-concepts/SKILL.md`
 - `.claude/skills/github-learn/daily-digest/SKILL.md`
 - `.claude/skills/github-learn/weekly-digest/SKILL.md`
 
-**本地手動觸發（補積壓 orchestrator，不由 routine 呼叫）：**
+**Orchestrator（一次補積壓 N 天）：**
 - `.claude/skills/github-learn/catch-up-backlog/SKILL.md` — 偵測 `daily/` 缺口 → 一次補 N 天 → 一次 commit
 
 ## 交叉引用
@@ -74,15 +74,21 @@
 - 部署：CF Pages 綁 `main`，每次 push 自動 build → https://github-learn-log.pages.dev/
 - 不 publish：`raw/`（原料快取，僅內部用）
 
-## Discord 推播
-- 架構：Discord Webhook（HTTP POST，不透過 bot / MCP）
-- 目標 channel：`1529833934354124920`
-- Webhook URL **不 commit 到 repo**，存在遠端 routine prompt 的 `DISCORD_WEBHOOK_URL` 環境變數（透過 `RemoteTrigger update` 注入）
-- 由 daily-digest / weekly-digest SKILL step 5 / 7 呼叫 `curl POST`
-- 想關：Discord 那邊 delete webhook；或改 routine prompt 拿掉 URL
-- 想換 target：另建 webhook → `RemoteTrigger update` 換 URL 即可，不需改本 repo
+## Routine 分工（2026-07-26 重定位）
 
-> ⚠️ **實際狀況（2026-07-23）**：routine sandbox 擋 `discord.com`，這條 push 走不通。設定保留待未來 Anthropic 放寬 sandbox。
+**Routine 定位 = 「cron 鄰居」**：Anthropic sandbox egress 全封（api.github.com 讀 / git push / discord.com 皆 403），routine 不做任何實際工作，只承擔「每日定時 fire → 觸發 Anthropic push notification 到手機」的鬧鐘角色。
+
+- Routine id: `trig_01HYQVK4tnG6WhkSPMHNPGcj`（`enabled: true`；cron `0 0 * * *` UTC = 08:00 Asia/Taipei）
+- `events` 已清空（無實際 prompt）——sandbox 沒放寬前恢復 prompt 也沒用
+- 收到 push notification 後 → 本地開 Claude Code CLI → 跑 `catch-up-backlog` skill
+
+想改回自動化：等 Anthropic 開 egress 或提供 commit-back 機制，再用 `RemoteTrigger update` 把完整 prompt 灌回 `session_context.events`（記得整段送，`session_context` 是 shallow-replace）。
+
+## Discord 推播（2026-07-26 停用）
+
+原本規劃 Discord webhook（daily/weekly SKILL step 5/7 curl POST）已停用。2026-07-26 因 secret 明碼儲存風險，webhook 已刪、GitHub PAT 已撤。日常 wiki 更新走上面「routine 通知 + 本地跑 catch-up」，不再走 Discord。
+
+若日後想恢復：`daily-digest` / `weekly-digest` SKILL 內 step 5 / 7 邏輯還在，重建 webhook + 由本地執行時 export `DISCORD_WEBHOOK_URL` 即可（不要塞回 routine prompt——那是明碼儲存）。
 
 ## Lint 規則（v1 手動觸發；未來可加月度 routine）
 - 孤兒 concept（沒 repo link）→ 警告
