@@ -1,6 +1,7 @@
 nav:
   - 首頁: index.md
   - 本站索引: Home.md
+  - datacenter
   - daily
   - weekly
   - repos
