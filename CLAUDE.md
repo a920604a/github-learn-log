@@ -29,7 +29,8 @@
 - `.claude/skills/github-learn/catch-up-backlog/SKILL.md` — 偵測 `daily/` 缺口 → 一次補 N 天 → 一次 commit
 
 ## 交叉引用
-- repos → concepts：每個專案頁至少 link 2 個概念
+- **連結一律用相對 markdown 連結**（`[slug](../concepts/slug.md)`）。**禁用 `[[wikilink]]`** — MkDocs 沒裝 wikilink plugin，會在 CF Pages 上印出字面字串
+- repos → concepts：每個專案頁尾必有 `## 相關概念` 區塊；已成頁的 slug 連結、pending 的 slug 用 inline code 不連（避免 404）
 - concepts → repos：每個概念頁底部列出「來源專案」清單
 - daily → repos：日報每張卡片 link 到對應專案頁
 - weekly → daily + repos：週報 link 到當週日報檔 + 專案頁
@@ -60,12 +61,15 @@
 - 更新：append 新 repo 做法 + 取捨對比，**不覆寫**
 - 每次更新加日期戳 `<!-- +YYYY-MM-DD from <repo> -->`
 
-## Ingest 觸發條件（scan-trending）
-- Topics: llm, agent, rag, mlops, distributed-systems, database, data-engineering, backend-framework
-- 語言: Python, TypeScript, Go, Rust
-- AI 篩選：架構深度 + 小到可重造（單人 or 小團隊 / 檔案 < 200 / star 快速成長）
+## Ingest 觸發條件（scan-trending v2，2026-07-28 修正）
+- **Star band：200 ≤ stars ≤ 15000**。上限是硬規則——超過的專案已是產品/組織在維護，讀它學到的是「怎麼做大」不是「怎麼設計」，也不可能週末重造。破例必須在 repo 頁 frontmatter 記 `star_cap_override: <理由>`
+- **檔案數 ≤ 300**（tree 排除 `node_modules|vendor|dist|build` 後計）
+- **不限 created 時間**，改用 `pushed:近 90 天` 判活躍——v1 的 `created:>30天` 結構性排除了 database / distributed-systems 這類成熟專案
+- **Topic bucket 每日輪替**（`date +%j % 4`）：A. llm/agent/rag/mcp｜B. database/vector-database/storage-engine｜C. distributed-systems/backend-framework/orchestration｜D. data-engineering/mlops/etl。目的是一週內四類至少各掃到一次，避免 AI 類洗版
+- 語言: Python, TypeScript, JavaScript, Go, Rust
 - 排除已在 `repos/` 的 repo
 - 目標：每日 1–2 個
+- **資料路徑**：優先 `gh api`；`api.github.com` 被 proxy 擋時（Cowork / CCR sandbox）fallback 到 `github.com` HTML 抓取。raw 檔要記 `via API` 或 `via HTML`
 
 ## Cloudflare Pages
 - Build tool: MkDocs + Material（見 `mkdocs.yml` / `requirements.txt`）

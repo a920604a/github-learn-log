@@ -32,11 +32,11 @@ Parse loop 是 tree-sitter，deterministic，no LLM in the write path。graph �
 
 ## 資料設計
 
-Node types：`file`, `class`, `function`, `import`。Edge types：`defines`, `calls`, `imports`, `inherits`。每條 edge 帶 `(source_file, line, extractor_version)`——這是[[code-ast-knowledge-graph]]的關鍵欄位，允許 caller 判斷「這條 edge 是最近 tree-sitter 版本抽出來的還是舊快照」，因此升級 parser 不用全重 build。graph 用 SQLite 而非 Neo4j / 專用圖 DB，是刻意的 local-first 取捨：一份檔、可 diff、可 grep、無 daemon。查詢用 recursive CTE 做 traversal，對「函式 X 的呼叫深度 3 內誰改動會炸」這種 impact 分析夠用。change tracking 靠 file mtime + content hash，比 git-blame 快十倍。
+Node types：`file`, `class`, `function`, `import`。Edge types：`defines`, `calls`, `imports`, `inherits`。每條 edge 帶 `(source_file, line, extractor_version)`——這是[code-ast-knowledge-graph](../concepts/code-ast-knowledge-graph.md)的關鍵欄位，允許 caller 判斷「這條 edge 是最近 tree-sitter 版本抽出來的還是舊快照」，因此升級 parser 不用全重 build。graph 用 SQLite 而非 Neo4j / 專用圖 DB，是刻意的 local-first 取捨：一份檔、可 diff、可 grep、無 daemon。查詢用 recursive CTE 做 traversal，對「函式 X 的呼叫深度 3 內誰改動會炸」這種 impact 分析夠用。change tracking 靠 file mtime + content hash，比 git-blame 快十倍。
 
 ## 為什麼這樣做
 
-三個乾脆的取捨。第一，**不做 embedding**：作者判斷 code review 場景「結構性問題」（依賴、呼叫圖、影響半徑）遠比「語義相似度」有價值，vector top-k 反而稀釋 signal。第二，**MCP over CLI-only**：MCP 讓 AI agent 主動 pull 需要的 sub-graph，不用 human middleman 貼結果；這是「[[mcp-context-provider]]」而不是「CLI 玩具」。第三，**incremental over rebuild**：codebase 每天改幾百行，重建 graph 十秒無所謂，但 review workflow 每分鐘查 20 次，那才是熱路徑。所以 write path 慢一點沒關係，query path 必須秒回。
+三個乾脆的取捨。第一，**不做 embedding**：作者判斷 code review 場景「結構性問題」（依賴、呼叫圖、影響半徑）遠比「語義相似度」有價值，vector top-k 反而稀釋 signal。第二，**MCP over CLI-only**：MCP 讓 AI agent 主動 pull 需要的 sub-graph，不用 human middleman 貼結果；這是「`mcp-context-provider`」而不是「CLI 玩具」。第三，**incremental over rebuild**：codebase 每天改幾百行，重建 graph 十秒無所謂，但 review workflow 每分鐘查 20 次，那才是熱路徑。所以 write path 慢一點沒關係，query path 必須秒回。
 
 ## 我能學到
 
@@ -61,3 +61,9 @@ Node types：`file`, `class`, `function`, `import`。Edge types：`defines`, `ca
 ### 換你解釋
 
 現在用你自己的話講給朋友：「為什麼在 code review 場景下，用『關係圖』會比『語義搜尋』更省 token？」講到卡住的地方，回來對照上面兩段。
+
+## 相關概念
+
+- [code-ast-knowledge-graph](../concepts/code-ast-knowledge-graph.md)
+- [local-first-agent-workbench](../concepts/local-first-agent-workbench.md)
+- _pending（待第 2 個專案觸及才開頁）_：`mcp-context-provider`

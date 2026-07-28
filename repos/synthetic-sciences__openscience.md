@@ -27,7 +27,7 @@ graph TD
   Server -. optional .-> Atlas["Atlas Client<br/>(managed models / wallet / graph)"]
 ```
 
-CLI 用 Bun + TypeScript 編成單一 native binary（每個平台各自 npm package，meta package 選對的裝）。Server 綁 `127.0.0.1` 並 enforce Host + Origin allowlist，**沒有 remote mode**。這是 [[local-first-agent-workbench]] 的很硬派版本。
+CLI 用 Bun + TypeScript 編成單一 native binary（每個平台各自 npm package，meta package 選對的裝）。Server 綁 `127.0.0.1` 並 enforce Host + Origin allowlist，**沒有 remote mode**。這是 [local-first-agent-workbench](../concepts/local-first-agent-workbench.md) 的很硬派版本。
 
 ## 資料設計
 
@@ -35,13 +35,13 @@ Session / artifacts / provenance 全落在本機 XDG 目錄（`~/.config/opensci
 
 ## 為什麼這樣做
 
-它做了兩個乾脆的 trade-off。第一，**只綁 localhost**：不做 remote mode 就不需要處理 auth / multi-tenant / infra，開發面向立刻收斂。第二，**Atlas 是 optional 客戶端**：所有 BYOK 使用者根本不需要碰到 Atlas 這個 closed platform，開源 repo 只有 client 端，wire contract 明確列出（`synsci` provider id、`thk_` wallet key、`/api/cli/*`）。這是把商業產品「clean 分離出可安裝的 workbench + 可有可無的雲端」的教科書範例 — 開源不是切一角，是分工 [[multi-provider-llm-routing]]。
+它做了兩個乾脆的 trade-off。第一，**只綁 localhost**：不做 remote mode 就不需要處理 auth / multi-tenant / infra，開發面向立刻收斂。第二，**Atlas 是 optional 客戶端**：所有 BYOK 使用者根本不需要碰到 Atlas 這個 closed platform，開源 repo 只有 client 端，wire contract 明確列出（`synsci` provider id、`thk_` wallet key、`/api/cli/*`）。這是把商業產品「clean 分離出可安裝的 workbench + 可有可無的雲端」的教科書範例 — 開源不是切一角，是分工 [multi-provider-llm-routing](../concepts/multi-provider-llm-routing.md)。
 
 ## 我能學到
 
 想帶回自己專案的兩件事：
 1. **雙層 prompt 組裝**（provider-level + agent-level）讓「換 model」和「換 agent 角色」變成正交軸，不會每個 agent 都要為每個 model 各寫一版 prompt。
-2. **catalog 兩路 load 同 interface**（cache-from-cloud vs bundled-source）— 開發者跑 source 時不用 mock 雲端，發布版又能拿到最新 catalog。這比「build 時 embed 一份」和「runtime always fetch」都更務實 [[on-demand-skill-catalog]]。
+2. **catalog 兩路 load 同 interface**（cache-from-cloud vs bundled-source）— 開發者跑 source 時不用 mock 雲端，發布版又能拿到最新 catalog。這比「build 時 embed 一份」和「runtime always fetch」都更務實 `on-demand-skill-catalog`。
 
 另外看到「blind reviewer gate 在 finalize 前跑」這種設計，我以前只把 review 放在 CI，沒想過可以放在 agent runtime 內部做為 finalize step。
 
@@ -60,3 +60,9 @@ Session / artifacts / provenance 全落在本機 XDG 目錄（`~/.config/opensci
 ### 換你解釋
 
 現在用你自己的話講給朋友：「為什麼這家咖啡店寧可放棄外送客源，也要堅持 localhost only？」講到卡住的地方，回來對照上面兩段。
+
+## 相關概念
+
+- [local-first-agent-workbench](../concepts/local-first-agent-workbench.md)
+- [multi-provider-llm-routing](../concepts/multi-provider-llm-routing.md)
+- _pending（待第 2 個專案觸及才開頁）_：`on-demand-skill-catalog`

@@ -14,7 +14,7 @@ concept_tags: [verbatim-memory-vs-summary, pluggable-storage-backend, local-firs
 
 ## 前言
 
-我一開始把 MemPalace 歸類為「又一個 vector DB wrapper」，直到讀到它 README 裡那句：「It does not summarize, extract, or paraphrase.」這是刻意的[[verbatim-memory-vs-summary]]取捨——大多數 AI memory 系統會把長對話 LLM-壓縮成摘要存進去，MemPalace 拒絕這樣做，理由是「摘要一定會漏東西」。它把 UI 抽象和 storage 抽象徹底分開，甚至用「宮殿」的空間隱喻（wing/room/drawer）做 scope query，讓 embedding 不再是唯一的召回機制。
+我一開始把 MemPalace 歸類為「又一個 vector DB wrapper」，直到讀到它 README 裡那句：「It does not summarize, extract, or paraphrase.」這是刻意的`verbatim-memory-vs-summary`取捨——大多數 AI memory 系統會把長對話 LLM-壓縮成摘要存進去，MemPalace 拒絕這樣做，理由是「摘要一定會漏東西」。它把 UI 抽象和 storage 抽象徹底分開，甚至用「宮殿」的空間隱喻（wing/room/drawer）做 scope query，讓 embedding 不再是唯一的召回機制。
 
 ## 系統架構
 
@@ -44,7 +44,7 @@ Storage backend 用 `mempalace/backends/base.py` 定義的三個抽象方法（`
 
 ## 為什麼這樣做
 
-三個乾脆的取捨。第一，**verbatim over summary**：摘要不可逆，一旦壓縮就丟資訊，日後想改召回策略就沒素材了；verbatim 讓 memory 是「原始日誌」而非「二手筆記」，代價是儲存空間但那在 local 幾乎免費。第二，**metaphor 和 backend 分離**（[[pluggable-storage-backend]]）：palace 隱喻是 UX，ChromaDB 是實作，兩者用 `backends/base.py` 徹底解耦——當 Chroma 被更快的 vector DB 取代（vector DB 生態每年洗牌），MemPalace 的 API contract 一行都不用改。第三，**只做 memory，不做 orchestration**：README 明說「Nothing leaves your machine unless you opt in」——它拒絕變成 agent framework 的一部分，堅持自己是 storage tier。這種**單一職責**在 AI infra 是稀缺品質。
+三個乾脆的取捨。第一，**verbatim over summary**：摘要不可逆，一旦壓縮就丟資訊，日後想改召回策略就沒素材了；verbatim 讓 memory 是「原始日誌」而非「二手筆記」，代價是儲存空間但那在 local 幾乎免費。第二，**metaphor 和 backend 分離**（`pluggable-storage-backend`）：palace 隱喻是 UX，ChromaDB 是實作，兩者用 `backends/base.py` 徹底解耦——當 Chroma 被更快的 vector DB 取代（vector DB 生態每年洗牌），MemPalace 的 API contract 一行都不用改。第三，**只做 memory，不做 orchestration**：README 明說「Nothing leaves your machine unless you opt in」——它拒絕變成 agent framework 的一部分，堅持自己是 storage tier。這種**單一職責**在 AI infra 是稀缺品質。
 
 ## 我能學到
 
@@ -69,3 +69,8 @@ Storage backend 用 `mempalace/backends/base.py` 定義的三個抽象方法（`
 ### 換你解釋
 
 現在用你自己的話講給朋友：「為什麼 MemPalace 寧可占更多硬碟也不肯讓 AI 幫你濃縮對話？」講到卡住的地方，回來對照上面兩段。
+
+## 相關概念
+
+- [local-first-agent-workbench](../concepts/local-first-agent-workbench.md)
+- _pending（待第 2 個專案觸及才開頁）_：`verbatim-memory-vs-summary`、`pluggable-storage-backend`

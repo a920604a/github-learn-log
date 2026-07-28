@@ -2,6 +2,8 @@
 
 個人資料庫：GitHub trending 專案的架構 / 資料設計學習軌跡。
 
+延伸：[詞彙表](glossary.md)（費曼段用過的生活比喻 ↔ 技術對照）
+
 ## 分類標籤
 
 - **agent-framework**：[agentlas-ai/Agentlas-OS](repos/agentlas-ai__Agentlas-OS.md)
@@ -29,7 +31,7 @@
 
 ### 週報
 
-- [2026-W30](weekly/2026-W30.md) — catch-up 補齊週：5 個新專案 + 3 個 concept 頁
+- [2026-W30](weekly/2026-W30.md) — 全週 7 個專案（07-21 首發 2 個 + 07-22~26 catch-up 補 5 個）+ 3 個 concept 成頁
 
 ### 專案（Repos）
 

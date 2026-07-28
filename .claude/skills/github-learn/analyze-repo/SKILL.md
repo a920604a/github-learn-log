@@ -109,6 +109,9 @@ graph TD
 ## 費曼式回顧
 （見下方詳細指引；共 180–300 字）
 
+## 相關概念
+（由 concept_tags 推導，見下方「Concept 連結寫法」）
+
 ### 用生活比喻重講一次
 （用一個日常場景 — 廚房 / 塞車 / 便當店 / 咖啡店 / 積木 …，
 國中生能聽懂的詞彙，避開 API / schema / runtime / DAG / RAG 等術語；60–100 字）
@@ -130,11 +133,27 @@ graph TD
 - **盲點要選「讀完前 5 段最容易誤讀的地方」**，不是隨便挑技術難點。
   - 好例子：「以為 local-first 就是不 call cloud，但實際上還是有 call，只是 loop 在本地」
   - 壞例子：「以為要用 Redis，但實際上用 SQLite」（這只是實作細節，不是理解漏洞）
-- **不要在費曼段用 concept slug `[[...]]`**（那是給前面 5 段用；費曼段刻意留白讓讀者自己 map）
+- **費曼段不要放任何 concept 連結**（那是給前面 5 段和頁尾「相關概念」用；費曼段刻意留白讓讀者自己 map）
 
 **字數：** 800–1000（`wc -m repos/${NAME}.md`；容忍 +/-100）
 
-**至少 link 2 個 concept：** 文中用 `[[concept-slug]]` 標記，例：`用了 [[rag-chunking-strategies|semantic chunking]]`。即使 concept 頁尚未建立也先標，`update-concepts` 會補。
+**Concept 連結寫法（重要，不要用 wikilink）：**
+
+MkDocs 沒有 wikilink plugin，`[[slug]]` 在 CF Pages 上會直接印出字面字串。一律用相對 markdown 連結：
+
+- **已成頁**（`concepts/<slug>.md` 存在）→ `[<slug>](../concepts/<slug>.md)`
+- **pending**（尚未成頁，只有 1 個 repo 觸及）→ 用 inline code 標記 slug，**不要連**（會 404）
+
+**頁尾必加 `## 相關概念` 區塊**（放在費曼式回顧之後，全頁最後）：
+
+```markdown
+## 相關概念
+
+- [slug-a](../concepts/slug-a.md)
+- _pending（待第 2 個專案觸及才開頁）_：`slug-b`、`slug-c`
+```
+
+內容直接由 frontmatter `concept_tags` 推導：命中 `concepts/` 的成連結、其餘列 pending。這一段同時滿足 CLAUDE.md「每個專案頁至少 link 2 個概念」的要求，並跟 concept 頁尾的「來源專案」形成雙向引用。
 
 **新比喻 → glossary.md**：出現「XX 就像 YY」這種比喻 → append 一 row 到 `glossary.md`。
 

@@ -35,11 +35,11 @@ Two-tier extraction 是核心：**code 走 deterministic tree-sitter 完全 offl
 
 ## 資料設計
 
-Node schema：`{id, type, name, source_path, source_line?, community_id, degree}`。Edge schema：`{source, target, relation, extraction_method, confidence?, provenance_snippet}`——`extraction_method ∈ {EXTRACTED, INFERRED}` 是[[deterministic-vs-llm-inference]]的關鍵欄位。EXTRACTED 帶 source_line 指回原始 token，INFERRED 帶 confidence + provenance_snippet（LLM 的推理依據）。這種**edge-level 可稽查性**讓 graph 從「AI 產出的一大坨」變成「可審計、可質疑、可修正的知識結構」。community detection 用 Leiden 演算法（Louvain 的改良版）自動分群，每個 node 得 `community_id`，graph.html 依此上色。這在大 codebase 特別有用——FastAPI 用 graphify 跑完後，「routing 相關的 node」、「dependency injection 相關的 node」、「pydantic schema 相關的 node」會自動分成不同色塊，比 folder structure 還準（因為 folder 是人為劃分，community 是**實際引用關係**產生的）。graph.json 是 portable 格式，可以放 git、可以做 diff、可以拿去別的工具再處理。
+Node schema：`{id, type, name, source_path, source_line?, community_id, degree}`。Edge schema：`{source, target, relation, extraction_method, confidence?, provenance_snippet}`——`extraction_method ∈ {EXTRACTED, INFERRED}` 是`deterministic-vs-llm-inference`的關鍵欄位。EXTRACTED 帶 source_line 指回原始 token，INFERRED 帶 confidence + provenance_snippet（LLM 的推理依據）。這種**edge-level 可稽查性**讓 graph 從「AI 產出的一大坨」變成「可審計、可質疑、可修正的知識結構」。community detection 用 Leiden 演算法（Louvain 的改良版）自動分群，每個 node 得 `community_id`，graph.html 依此上色。這在大 codebase 特別有用——FastAPI 用 graphify 跑完後，「routing 相關的 node」、「dependency injection 相關的 node」、「pydantic schema 相關的 node」會自動分成不同色塊，比 folder structure 還準（因為 folder 是人為劃分，community 是**實際引用關係**產生的）。graph.json 是 portable 格式，可以放 git、可以做 diff、可以拿去別的工具再處理。
 
 ## 為什麼這樣做
 
-三個乾脆的取捨。第一，**不用 embedding，用 graph**：作者的判斷是「structural query」（誰依賴誰、路徑追蹤）比「semantic similarity」更適合 code / docs 導覽。這是**選擇 shape 而非 ranking**——結構性答案有 canonical form（一條路徑、一個 subgraph），vector 只能給你一個排序清單。第二，**Deterministic vs Inferred 標記強制透明**：多數 AI 工具把兩者混在一起輸出，讓使用者無法區分。graphify 拒絕這種混淆——這是**信任作為 first-class feature**，代價是輸出多一個維度但換來使用者對系統的信任。第三，**local-first + optional cloud**：CLI 完全本地，只有 semantic pass 需要 LLM（可用 assistant 內建 model 或自帶 API key），配套 SaaS graphify.com 是可選的 always-on 版本。這是[[local-first-agent-workbench]]的一種變體：open source 是完整可用的產品，SaaS 是「懶得自己跑」的付費升級。
+三個乾脆的取捨。第一，**不用 embedding，用 graph**：作者的判斷是「structural query」（誰依賴誰、路徑追蹤）比「semantic similarity」更適合 code / docs 導覽。這是**選擇 shape 而非 ranking**——結構性答案有 canonical form（一條路徑、一個 subgraph），vector 只能給你一個排序清單。第二，**Deterministic vs Inferred 標記強制透明**：多數 AI 工具把兩者混在一起輸出，讓使用者無法區分。graphify 拒絕這種混淆——這是**信任作為 first-class feature**，代價是輸出多一個維度但換來使用者對系統的信任。第三，**local-first + optional cloud**：CLI 完全本地，只有 semantic pass 需要 LLM（可用 assistant 內建 model 或自帶 API key），配套 SaaS graphify.com 是可選的 always-on 版本。這是[local-first-agent-workbench](../concepts/local-first-agent-workbench.md)的一種變體：open source 是完整可用的產品，SaaS 是「懶得自己跑」的付費升級。
 
 ## 我能學到
 
@@ -64,3 +64,9 @@ Node schema：`{id, type, name, source_path, source_line?, community_id, degree}
 ### 換你解釋
 
 現在用你自己的話講給朋友：「為什麼 graphify 要在圖上顯性標記『這條邊是規則抽的還是 AI 猜的』？如果全部混在一起輸出會怎樣？」講到卡住的地方，回來對照上面兩段。
+
+## 相關概念
+
+- [code-ast-knowledge-graph](../concepts/code-ast-knowledge-graph.md)
+- [local-first-agent-workbench](../concepts/local-first-agent-workbench.md)
+- _pending（待第 2 個專案觸及才開頁）_：`deterministic-vs-llm-inference`

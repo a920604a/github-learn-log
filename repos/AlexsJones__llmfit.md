@@ -33,11 +33,11 @@ Rust binary 單檔部署，`brew install` 之外還簽 SignPath 證書。TUI 內
 
 ## 資料設計
 
-Model catalog 用嵌入式 registry（Rust crate 內），每 release 隨 binary 一起發。每筆 entry 帶 `{model_id, quant_format, context_window, param_count, expected_quality, community_bench_tok_s?}`。Community benchmark 是 `Option`——沒有實測就用 heuristic 估算（基於 model size × user hardware profile），有實測就標 `✓`。使用者跑完 benchmark 產出的 JSON 走**TUI 內建 PR flow**：`git remote add fork → commit → push → open PR`，全部在 TUI 內完成。這就是[[benchmark-collect-share-loop]]的精華：**貢獻摩擦降到零，資料才會回流**。fit scoring 是 memory-aware：模型 GGUF Q4_K_M 需 5.2GB，你 GPU 8GB → fit 分數 = 1.0；需 12GB → fit = 0，直接不推薦。MoE 模型特別處理（活躍參數 vs 總參數分開算 VRAM）。
+Model catalog 用嵌入式 registry（Rust crate 內），每 release 隨 binary 一起發。每筆 entry 帶 `{model_id, quant_format, context_window, param_count, expected_quality, community_bench_tok_s?}`。Community benchmark 是 `Option`——沒有實測就用 heuristic 估算（基於 model size × user hardware profile），有實測就標 `✓`。使用者跑完 benchmark 產出的 JSON 走**TUI 內建 PR flow**：`git remote add fork → commit → push → open PR`，全部在 TUI 內完成。這就是`benchmark-collect-share-loop`的精華：**貢獻摩擦降到零，資料才會回流**。fit scoring 是 memory-aware：模型 GGUF Q4_K_M 需 5.2GB，你 GPU 8GB → fit 分數 = 1.0；需 12GB → fit = 0，直接不推薦。MoE 模型特別處理（活躍參數 vs 總參數分開算 VRAM）。
 
 ## 為什麼這樣做
 
-三個乾脆的取捨。第一，**Rust 而非 Python**：hardware detection 要跨平台 syscall（macOS `sysctl` / Linux `/proc/meminfo` / Windows WMI），Rust 的 crate ecosystem 對這種 low-level 綁定更成熟，還能編成單一 binary 分發，避免 Python venv 地獄。第二，**PR flow 內建 TUI**：作者知道「你可以貢獻資料」是空話，只有摩擦低於「打開瀏覽器」使用者才會做。第三，**runtime abstraction over specific backend**：不綁 Ollama 或 llama.cpp，是因為 local LLM 生態太亂——今天 MLX 快、明天 Docker Model Runner 出、後天 LM Studio 升級，llmfit 只做「調度層」不做「執行層」，把 runtime 選擇留給使用者。這是[[multi-provider-llm-routing]]應用在**本地** LLM 場景的變體。
+三個乾脆的取捨。第一，**Rust 而非 Python**：hardware detection 要跨平台 syscall（macOS `sysctl` / Linux `/proc/meminfo` / Windows WMI），Rust 的 crate ecosystem 對這種 low-level 綁定更成熟，還能編成單一 binary 分發，避免 Python venv 地獄。第二，**PR flow 內建 TUI**：作者知道「你可以貢獻資料」是空話，只有摩擦低於「打開瀏覽器」使用者才會做。第三，**runtime abstraction over specific backend**：不綁 Ollama 或 llama.cpp，是因為 local LLM 生態太亂——今天 MLX 快、明天 Docker Model Runner 出、後天 LM Studio 升級，llmfit 只做「調度層」不做「執行層」，把 runtime 選擇留給使用者。這是[multi-provider-llm-routing](../concepts/multi-provider-llm-routing.md)應用在**本地** LLM 場景的變體。
 
 ## 我能學到
 
@@ -62,3 +62,8 @@ Model catalog 用嵌入式 registry（Rust crate 內），每 release 隨 binary
 ### 換你解釋
 
 現在用你自己的話講給朋友：「為什麼 llmfit 敢開 4 個維度分數而不直接推薦一個最好的模型？」講到卡住的地方，回來對照上面兩段。
+
+## 相關概念
+
+- [multi-provider-llm-routing](../concepts/multi-provider-llm-routing.md)
+- _pending（待第 2 個專案觸及才開頁）_：`hardware-model-fit-scoring`、`benchmark-collect-share-loop`

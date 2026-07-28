@@ -14,7 +14,7 @@ concept_tags: [multi-source-adapter-registry, primary-fallback-routing, local-fi
 
 ## 前言
 
-「給你的 AI Agent 一鍵裝上互聯網能力」聽起來像行銷話，但點進去看它處理的問題清單 — YouTube 字幕、Twitter 免付費搜尋、Reddit 反 403、小紅書免登錄、Bilibili 反風控、RSS 訂閱 — 每一項都是**個別困難、加起來絕望**的整合噩夢。我一直覺得這種「大雜燴 wrapper」通常做不深，這個專案讓我改觀：它把每個平台的**接入方式輪替**當成產品第一價值主張（「平台封了我們修」），並把 primary+fallback backend routing 做成基礎設施。這才是[[multi-source-adapter-registry]]真實生產環境的樣子。
+「給你的 AI Agent 一鍵裝上互聯網能力」聽起來像行銷話，但點進去看它處理的問題清單 — YouTube 字幕、Twitter 免付費搜尋、Reddit 反 403、小紅書免登錄、Bilibili 反風控、RSS 訂閱 — 每一項都是**個別困難、加起來絕望**的整合噩夢。我一直覺得這種「大雜燴 wrapper」通常做不深，這個專案讓我改觀：它把每個平台的**接入方式輪替**當成產品第一價值主張（「平台封了我們修」），並把 primary+fallback backend routing 做成基礎設施。這才是`multi-source-adapter-registry`真實生產環境的樣子。
 
 ## 系統架構
 
@@ -37,7 +37,7 @@ graph TD
 
 ## 資料設計
 
-`fetch(url) → normalized_content` 是所有 adapter 的統一介面。`normalized_content` 是一個小 schema：`{platform, content_type, title, author, body_text, media_urls, metadata, fetched_at}`——各平台原始差異在 adapter 內攤平，caller 只看 normalized 版本。這種**適配器扁平化 schema** 讓上層 agent 不用理解每個平台的 quirk。cookie 存 `~/.agent-reach/cookies/<platform>.json`，只讀不傳；付費代理（可選 $1/月）只用在需要 IP 輪替的高風險平台（Reddit / Twitter 大量請求）。backend 選擇邏輯不是純輪詢——每個 backend 帶 `success_rate_last_100_calls` 快照，選擇下一個時依成功率排序。這讓 primary/fallback 不是硬編死順序，而是**軟切換**：某天 primary 突然大量失敗，系統會自動偏向 fallback，不需要人工介入。這是[[primary-fallback-routing]]比 curl-in-a-loop 高明的地方。
+`fetch(url) → normalized_content` 是所有 adapter 的統一介面。`normalized_content` 是一個小 schema：`{platform, content_type, title, author, body_text, media_urls, metadata, fetched_at}`——各平台原始差異在 adapter 內攤平，caller 只看 normalized 版本。這種**適配器扁平化 schema** 讓上層 agent 不用理解每個平台的 quirk。cookie 存 `~/.agent-reach/cookies/<platform>.json`，只讀不傳；付費代理（可選 $1/月）只用在需要 IP 輪替的高風險平台（Reddit / Twitter 大量請求）。backend 選擇邏輯不是純輪詢——每個 backend 帶 `success_rate_last_100_calls` 快照，選擇下一個時依成功率排序。這讓 primary/fallback 不是硬編死順序，而是**軟切換**：某天 primary 突然大量失敗，系統會自動偏向 fallback，不需要人工介入。這是`primary-fallback-routing`比 curl-in-a-loop 高明的地方。
 
 ## 為什麼這樣做
 
@@ -66,3 +66,8 @@ graph TD
 ### 換你解釋
 
 現在用你自己的話講給朋友：「為什麼 Agent Reach 的產品主打不是『你能爬到什麼平台』而是『平台變了我們替你修』？」講到卡住的地方，回來對照上面兩段。
+
+## 相關概念
+
+- [local-first-agent-workbench](../concepts/local-first-agent-workbench.md)
+- _pending（待第 2 個專案觸及才開頁）_：`multi-source-adapter-registry`、`primary-fallback-routing`
