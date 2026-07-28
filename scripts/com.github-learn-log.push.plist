@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.github-learn-log.push</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/bin/bash</string>
+        <string>/Users/chenyuan/Desktop/side-projects/github-learn-log/scripts/auto-push.sh</string>
+    </array>
+
+    <!-- 每天 08:10 —— 比 Cowork 排程任務（08:00）晚 10 分鐘，讓它先寫完 commit -->
+    <key>StartCalendarInterval</key>
+    <dict>
+        <key>Hour</key>
+        <integer>8</integer>
+        <key>Minute</key>
+        <integer>10</integer>
+    </dict>
+
+    <!-- 到點時電腦如果是睡的，醒來後補跑一次 -->
+    <key>RunAtLoad</key>
+    <false/>
+
+    <key>StandardOutPath</key>
+    <string>/tmp/github-learn-log-push.out</string>
+    <key>StandardErrorPath</key>
+    <string>/tmp/github-learn-log-push.err</string>
+</dict>
+</plist>
