@@ -168,11 +168,25 @@ grep -r '\[\[' /tmp/sitebuild --include='*.html' && echo "殘留 wikilink，修�
 
 commit message（英文）：`feat(dc): card <id> <slug>`
 
-**不要 push。** 沙箱沒有 SSH key，使用者 Mac 上的 launchd job 於每日 08:10 自動 push。
+**不要 push。** 沙箱沒有 SSH key。使用者 Mac 上的 launchd job **每 30 分鐘**輪詢一次，發現有未推的 commit 就推。（原本排 08:10 單次，但 2026-07-29 實測排程任務 08:31 才 commit 完，早跑的 push job 什麼都沒推到，已改成輪詢。）
+
+### Git lock 檔（每次都要做）
+
+沙箱預設**不能刪檔**，git 收工時無法 unlink 自己的 lock，會留下 `.git/HEAD.lock` / `.git/index.lock`。這些殘留檔會擋住使用者本機的 git，也會擋住明天這支 skill。
+
+開工前與收工後**各檢查一次**：
+
+```bash
+ls -la .git/*.lock 2>/dev/null
+rm -f .git/HEAD.lock .git/index.lock
+```
+
+若 `rm` 回 `Operation not permitted` → 呼叫 `allow_cowork_file_delete` 取得刪除權限後再刪一次。**這個權限每個 session 都要重新取得，不要假設上次拿過就還在。**
 
 ## 常見錯誤
 
 - **用 curl 抓 learn.microsoft.com / sre.google** → 回 000，整條掛掉。用 `web_fetch`
+- **收工沒清 git lock 檔** → 沙箱預設不能刪檔，`git commit` 之後常留下 `.git/HEAD.lock` 或 `.git/index.lock`。**它們會擋住使用者本機的 git，也會擋住明天這支 skill 自己。** 2026-07-29 實測發生過一次。收工前一定要清（見下方「Git lock 檔」）
 - **寫超過 500 字** → 使用者讀不完，累積成債。寧可拆成兩張卡分兩天
 - **跳過「對資料模型的意涵」** → 那是這張卡存在的唯一理由，其他段落都是為它服務的
 - **不照佇列順序、挑自己好寫的寫** → 電力鏈要按實際電流方向走才建得起拓撲直覺

@@ -99,14 +99,17 @@
 |---|---|---|
 | 爬資料 | Cowork 排程（`web_fetch` / `WebSearch`；github.com 也可用 curl） | 沙箱 proxy 白名單只放行 github.com，其餘網域 curl 全 000，但 web_fetch 通 |
 | 寫檔 + 本機 commit | Cowork 排程 | 掛載目錄就是使用者 Mac 上的真實資料夾，寫進去就在本機 |
-| **git push** | **使用者 Mac 上的 launchd job**（`scripts/auto-push.sh`，每日 08:10） | 沙箱沒有 SSH key，push 一定失敗。把這段搬出沙箱就不用存任何 token |
+| **git push** | **使用者 Mac 上的 launchd job**（`scripts/auto-push.sh`，每 30 分鐘輪詢） | 沙箱沒有 SSH key，push 一定失敗。把這段搬出沙箱就不用存任何 token |
 
 排程任務：
 - `github-learn-log-daily` — GitHub trending 軌跡，**2026-07-28 起暫停**（`enabled: false`，未刪除）
 - `datacenter-daily-card` — 資料中心軌跡，週一至週五 08:00
 - `datacenter-weekly-review` — 資料中心週報，週日 10:00
 
-沙箱還有一個坑：**預設不能刪檔**，git 會卡在無法 unlink `.git/index.lock`。遇到 `Operation not permitted` 要先呼叫 `allow_cowork_file_delete` 取得權限。
+沙箱還有兩個坑：
+
+1. **預設不能刪檔** → git 無法 unlink 自己的 lock，`commit` 之後會留下 `.git/HEAD.lock` / `.git/index.lock`，**擋住使用者本機的 git 也擋住隔天的排程**（2026-07-29 實測發生）。每支排程 skill 開工前與收工後都要 `rm -f .git/*.lock`；遇到 `Operation not permitted` 先呼叫 `allow_cowork_file_delete`，該權限**每個 session 都要重新取得**。
+2. **任務耗時不固定** → 2026-07-29 那次 08:12 啟動、08:31 才 commit 完。所以 push job 不能排固定時間點，改用每 30 分鐘輪詢（`StartInterval 1800`）。
 
 ## Discord 推播（2026-07-26 停用）
 
