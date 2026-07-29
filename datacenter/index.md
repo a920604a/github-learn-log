@@ -38,7 +38,7 @@ started: 2026-07-28
 
 - [完整 Roadmap](roadmap.md) — 六個月分階段、教材清單、驗收條件
 - [學習佇列](backlog.md) — 61 項，每個工作日消耗一項
-- [設備卡](devices/utility-feed.md) — 已完成的設備卡
+- 設備卡 — [市電進線](devices/utility-feed.md)、[變壓器](devices/transformer.md)
 - [主題卡](topics/index.md) — 容量語意、協定、流程等非設備主題
 - [週報](weekly/index.md) — 每週彙整 + 自我測驗 + 間隔複習
 
@@ -47,9 +47,9 @@ started: 2026-07-28
 | 項目 | 狀態 |
 |---|---|
 | 佇列總數 | 61 |
-| 已完成 | 1 |
+| 已完成 | 2 |
 | 目前輪次 | 第一輪：電力鏈 |
-| 下一張 | `dc-02` 變壓器 |
+| 下一張 | `dc-03` 中壓開關設備 |
 
 ## 提醒：有時效性的事
 

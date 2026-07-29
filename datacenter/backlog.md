@@ -1,6 +1,6 @@
 ---
 track: datacenter
-updated: 2026-07-28
+updated: 2026-07-29
 ---
 
 # 學習佇列
@@ -21,7 +21,7 @@ updated: 2026-07-28
 依實際電力流向排序，從上游往下游走。
 
 - [x] `dc-01` 市電進線與受電設施（utility feed / 責任分界點） — 2026-07-28 [卡片](devices/utility-feed.md)
-- [ ] `dc-02` 變壓器（transformer）
+- [x] `dc-02` 變壓器（transformer） — 2026-07-29 [卡片](devices/transformer.md)
 - [ ] `dc-03` 中壓開關設備（MV switchgear）
 - [ ] `dc-04` 自動切換開關 ATS（automatic transfer switch）
 - [ ] `dc-05` 柴油發電機（diesel generator）
@@ -99,7 +99,7 @@ updated: 2026-07-28
 ## 進度
 
 - 總項目：61
-- 已完成：1
+- 已完成：2
 - 預估完成：每週 5 項 → 約 13 週跑完第一到第四輪，加主題卡約 15–16 週（深度優先，慢一點沒關係）
 
 > 完成第一輪（電力鏈 16 項）時應該回頭做一次檢查：
