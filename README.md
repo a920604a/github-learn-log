@@ -1,6 +1,9 @@
 # github-learn-log
 
-> 我的個人 wiki：每天由 [Claude Code routine](https://claude.ai/code/routines) 自動掃 GitHub trending，挑 1–2 個「架構深度 + 週末可重造」的專案，寫成鐵人日誌風的 markdown 網絡（entity 頁 × 累加式概念頁 × 日/週報），推到 Discord + 部署到 Cloudflare Pages。
+> 我的個人學習 wiki，目前有兩條軌跡：
+> **A. GitHub trending** — 每日掃 trending 挑「架構深度 + 週末可重造」的專案，寫成鐵人日誌風的 markdown 網絡（**2026-07-28 起暫停**）。
+> **B. 資料中心** — 為了在自建自營機房建置 infra management 系統而累積的領域知識，教材驅動、每工作日一張設備卡（**進行中**）。
+> 兩條都部署到 Cloudflare Pages。
 
 **線上瀏覽**：<https://github-learn-log.pages.dev/>
 
@@ -37,7 +40,7 @@ flowchart TB
   Agent -->|curl POST| Discord
 ```
 
-> ⚠️ **實際狀況（2026-07-23 驗證）**：Claude Code Remote Routine sandbox egress 政策封鎖所有外部 HTTPS（git push / api.github.com / discord.com 皆 403），這個架構圖代表**理想 flow**，實際 routine fire 後全部 403、wiki 不會更新。詳見文末「已知洞」。
+> **2026-07-28 重整**：舊的 Claude Code Remote Routine（`trig_01HYQVK4tnG6WhkSPMHNPGcj`）因 sandbox egress 全封從未產出任何東西，已淘汰刪除。現在改由 Cowork 排程任務驅動——它掛載使用者 Mac 上的真實資料夾，所以寫檔與 commit 都落在本機；唯一做不到的 `git push` 交給 Mac 上的 launchd job。**這樣一來全程不需要儲存任何 token。**
 
 ## 資料流
 

@@ -89,15 +89,24 @@
 - 部署：CF Pages 綁 `main`，每次 push 自動 build → https://github-learn-log.pages.dev/
 - 不 publish：`raw/`（原料快取，僅內部用）
 
-## Routine 分工（2026-07-26 重定位）
+## 自動化現況（2026-07-28 重整）
 
-**Routine 定位 = 「cron 鄰居」**：Anthropic sandbox egress 全封（api.github.com 讀 / git push / discord.com 皆 403），routine 不做任何實際工作，只承擔「每日定時 fire → 觸發 Anthropic push notification 到手機」的鬧鐘角色。
+**Claude Code Remote Routine 已淘汰。** 舊 routine `trig_01HYQVK4tnG6WhkSPMHNPGcj` 因 sandbox egress 全封（api.github.com / git push / discord.com 皆 403）從未產出任何東西，只當過鬧鐘，已於 2026-07-28 決定刪除。
 
-- Routine id: `trig_01HYQVK4tnG6WhkSPMHNPGcj`（`enabled: true`；cron `0 0 * * *` UTC = 08:00 Asia/Taipei）
-- `events` 已清空（無實際 prompt）——sandbox 沒放寬前恢復 prompt 也沒用
-- 收到 push notification 後 → 本地開 Claude Code CLI → 跑 `catch-up-backlog` skill
+現在改由 **Cowork 排程任務**驅動，實測可行的分工是：
 
-想改回自動化：等 Anthropic 開 egress 或提供 commit-back 機制，再用 `RemoteTrigger update` 把完整 prompt 灌回 `session_context.events`（記得整段送，`session_context` 是 shallow-replace）。
+| 環節 | 誰做 | 為什麼 |
+|---|---|---|
+| 爬資料 | Cowork 排程（`web_fetch` / `WebSearch`；github.com 也可用 curl） | 沙箱 proxy 白名單只放行 github.com，其餘網域 curl 全 000，但 web_fetch 通 |
+| 寫檔 + 本機 commit | Cowork 排程 | 掛載目錄就是使用者 Mac 上的真實資料夾，寫進去就在本機 |
+| **git push** | **使用者 Mac 上的 launchd job**（`scripts/auto-push.sh`，每日 08:10） | 沙箱沒有 SSH key，push 一定失敗。把這段搬出沙箱就不用存任何 token |
+
+排程任務：
+- `github-learn-log-daily` — GitHub trending 軌跡，**2026-07-28 起暫停**（`enabled: false`，未刪除）
+- `datacenter-daily-card` — 資料中心軌跡，週一至週五 08:00
+- `datacenter-weekly-review` — 資料中心週報，週日 10:00
+
+沙箱還有一個坑：**預設不能刪檔**，git 會卡在無法 unlink `.git/index.lock`。遇到 `Operation not permitted` 要先呼叫 `allow_cowork_file_delete` 取得權限。
 
 ## Discord 推播（2026-07-26 停用）
 

@@ -11,18 +11,23 @@
         <string>/Users/chenyuan/Desktop/side-projects/github-learn-log/scripts/auto-push.sh</string>
     </array>
 
-    <!-- 每天 08:10 —— 比 Cowork 排程任務（08:00）晚 10 分鐘，讓它先寫完 commit -->
-    <key>StartCalendarInterval</key>
-    <dict>
-        <key>Hour</key>
-        <integer>8</integer>
-        <key>Minute</key>
-        <integer>10</integer>
-    </dict>
+    <!--
+      每 30 分鐘檢查一次是否有未 push 的 commit。
 
-    <!-- 到點時電腦如果是睡的，醒來後補跑一次 -->
+      原本是 StartCalendarInterval 排 08:10 單次，但 2026-07-29 實測：
+      Cowork 排程任務 08:12 才啟動、08:31 才 commit 完 —— push job 比
+      commit 早跑 21 分鐘，整天沒推出去。任務耗時會隨卡片難度變動，
+      固定時間點必然會再漏，所以改成輪詢。
+
+      沒東西可推時腳本在第一個判斷就 exit 0（純本機 ref 比對，不連網、
+      不寫 log），所以高頻執行的成本可以忽略。
+    -->
+    <key>StartInterval</key>
+    <integer>1800</integer>
+
+    <!-- 開機／登入時先跑一次，補上電腦關機期間累積的 commit -->
     <key>RunAtLoad</key>
-    <false/>
+    <true/>
 
     <key>StandardOutPath</key>
     <string>/tmp/github-learn-log-push.out</string>
