@@ -23,7 +23,7 @@ updated: 2026-07-30
 - [x] `dc-01` 市電進線與受電設施（utility feed / 責任分界點） — 2026-07-28 [卡片](devices/utility-feed.md)
 - [x] `dc-02` 變壓器（transformer） — 2026-07-29 [卡片](devices/transformer.md)
 - [x] `dc-03` 中壓開關設備（MV switchgear）— 額定與保護 — 2026-07-30 [卡片](devices/mv-switchgear.md)
-- [ ] `dc-03b` LSC 服務連續性分級與抽出式斷路器互鎖（2026-07-30 從 dc-03 拆出：字數超標，且互鎖狀態機自成一題）
+- [ ] `dc-03b` LSC 服務連續性分級與抽出式斷路器互鎖（2026-07-30 從 dc-03 拆出。**注意：當時的拆分理由之一「字數超標」已失效**——字數上限同日上調到 10000。保留這一項的理由只剩「互鎖狀態機自成一題」，若覺得不值得單獨一天，可併回 `mv-switchgear.md` 並刪掉本項）
 - [ ] `dc-04` 自動切換開關 ATS（automatic transfer switch）
 - [ ] `dc-05` 柴油發電機（diesel generator）
 - [ ] `dc-06` 日用油箱與儲油槽（day tank / bulk fuel）
