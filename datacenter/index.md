@@ -38,7 +38,7 @@ started: 2026-07-28
 
 - [完整 Roadmap](roadmap.md) — 六個月分階段、教材清單、驗收條件
 - [學習佇列](backlog.md) — 61 項，每個工作日消耗一項
-- 設備卡 — [市電進線](devices/utility-feed.md)、[變壓器](devices/transformer.md)
+- 設備卡 — [市電進線](devices/utility-feed.md)、[變壓器](devices/transformer.md)、[中壓開關設備](devices/mv-switchgear.md)
 - [主題卡](topics/index.md) — 容量語意、協定、流程等非設備主題
 - [週報](weekly/index.md) — 每週彙整 + 自我測驗 + 間隔複習
 
@@ -46,10 +46,10 @@ started: 2026-07-28
 
 | 項目 | 狀態 |
 |---|---|
-| 佇列總數 | 61 |
-| 已完成 | 2 |
+| 佇列總數 | 62 |
+| 已完成 | 3 |
 | 目前輪次 | 第一輪：電力鏈 |
-| 下一張 | `dc-03` 中壓開關設備 |
+| 下一張 | `dc-03b` LSC 分級與抽出式斷路器互鎖 |
 
 ## 提醒：有時效性的事
 

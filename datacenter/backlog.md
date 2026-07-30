@@ -1,6 +1,6 @@
 ---
 track: datacenter
-updated: 2026-07-29
+updated: 2026-07-30
 ---
 
 # 學習佇列
@@ -22,7 +22,8 @@ updated: 2026-07-29
 
 - [x] `dc-01` 市電進線與受電設施（utility feed / 責任分界點） — 2026-07-28 [卡片](devices/utility-feed.md)
 - [x] `dc-02` 變壓器（transformer） — 2026-07-29 [卡片](devices/transformer.md)
-- [ ] `dc-03` 中壓開關設備（MV switchgear）
+- [x] `dc-03` 中壓開關設備（MV switchgear）— 額定與保護 — 2026-07-30 [卡片](devices/mv-switchgear.md)
+- [ ] `dc-03b` LSC 服務連續性分級與抽出式斷路器互鎖（2026-07-30 從 dc-03 拆出：字數超標，且互鎖狀態機自成一題）
 - [ ] `dc-04` 自動切換開關 ATS（automatic transfer switch）
 - [ ] `dc-05` 柴油發電機（diesel generator）
 - [ ] `dc-06` 日用油箱與儲油槽（day tank / bulk fuel）
@@ -98,8 +99,8 @@ updated: 2026-07-29
 
 ## 進度
 
-- 總項目：61
-- 已完成：2
+- 總項目：62（2026-07-30 從 dc-03 拆出 dc-03b）
+- 已完成：3
 - 預估完成：每週 5 項 → 約 13 週跑完第一到第四輪，加主題卡約 15–16 週（深度優先，慢一點沒關係）
 
 > 完成第一輪（電力鏈 16 項）時應該回頭做一次檢查：
