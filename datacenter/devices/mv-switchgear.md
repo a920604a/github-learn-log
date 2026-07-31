@@ -13,7 +13,7 @@ related: [dc-01, dc-02, dc-04, dc-07]
 
 從 [市電進線](utility-feed.md) 的責任分界點進來後，第一個**你擁有、你可以操作**的節點。它把一路進線分成數路饋線送去 [變壓器](transformer.md)、發電機或其他機房區。不改電壓也不改功率，卻決定**故障時多快被切斷**。
 
-> 另一半——服務連續性分級 LSC 與抽出式斷路器互鎖——單獨寫成 `dc-03b`。今天先講額定與保護。
+> 另一半——服務連續性分級 LSC 與抽出式斷路器互鎖——單獨寫成 [dc-03b](lsc-and-interlocks.md)。今天先講額定與保護。
 
 ## 六格
 
@@ -21,7 +21,7 @@ related: [dc-01, dc-02, dc-04, dc-07]
 
 **容量單位**：四個獨立額定，缺一個就不是規格——Ur（台灣 22.8 kV 用 **24 kV 級**，含 Ud / Up）、匯流排 Ir（630 / 1250 / 2500 A）、短時耐受 **Ik / tk（必成對**，例 25 kA 3 s）、內部電弧分級 **IAC**（例 `IAC A FLR 31.5 kA 1 s`）。
 
-**冗餘表達**：單母線不可維護；**單母線分段**與 **main-tie-main**（雙進線＋常開母聯）才有 N+1 語意。但拓撲只是一半，另一半是 LSC（見 `dc-03b`）。
+**冗餘表達**：單母線不可維護；**單母線分段**與 **main-tie-main**（雙進線＋常開母聯）才有 N+1 語意。但拓撲只是一半，另一半是 LSC（見 [dc-03b](lsc-and-interlocks.md)）。
 
 **遙測介面**：主流 **IEC 61850**（MMS 給監控、GOOSE 給保護互鎖，< 3 ms），對外常再加一層 Modbus TCP。三種資料型態混在同一台設備：三相量測（time-series）、電驛旗標與操作次數（事件）、**事故波形 COMTRADE（blob）**。
 
@@ -76,7 +76,7 @@ I₁²t₁ = I₂²t₂  →  I₂ = I₁ × √(t₁ ÷ t₂)
 
 1. **所有耐受額定都要存成 (值, 時間) 對**：`ik_ka` + `ik_duration_s`、`iac_ka` + `iac_duration_s` + `iac_sides` + **`iac_standard`（IEC / IEEE）**。比較前必須換算到同一基準，這個換算屬於模型的方法。
 
-2. **這裡第一次出現分支，關係要能一對多。** `upstream_id` 保持單值、`units` 必須是集合；寫成一進一出，`dc-03b` 與 `dc-04` 都會卡住。
+2. **這裡第一次出現分支，關係要能一對多。** `upstream_id` 保持單值、`units` 必須是集合；寫成一進一出，[dc-03b](lsc-and-interlocks.md) 與 `dc-04` 都會卡住。
 
 3. **保護清除時間是欄位，不是文件。** `clearing_time_s` 要進模型且**能算出入射能量估計值**——它是「設定值變更會改變人身風險」的唯一可查詢載體。只存在電驛工程師筆電裡，系統就無法在變更審查時提出異議。
 
@@ -116,7 +116,7 @@ class MVSwitchgear:
 
 **加分題**：把 `Transformer.upstream_id` 改指向 `MVFeederUnit.id`（**不是** `MVSwitchgear.id`），再寫 `trace_upstream(device)` 回 `UtilitySource`。
 
-> 明天 `dc-03b` 會在 `MVFeederUnit` 上長出互鎖狀態機，今天先留薄類別。
+> [dc-03b](lsc-and-interlocks.md) 會在 `MVFeederUnit` 上長出互鎖狀態機，今天先留薄類別。
 
 ## 自我檢核
 
@@ -138,5 +138,5 @@ class MVSwitchgear:
 
 ---
 
-**下一張**：`dc-03b` LSC 服務連續性分級與抽出式斷路器互鎖
+**下一張**：[dc-03b LSC 服務連續性分級與抽出式斷路器互鎖](lsc-and-interlocks.md)
 </content>
