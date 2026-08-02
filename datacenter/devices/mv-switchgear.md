@@ -139,4 +139,3 @@ class MVSwitchgear:
 ---
 
 **下一張**：[dc-03b LSC 服務連續性分級與抽出式斷路器互鎖](lsc-and-interlocks.md)
-</content>
