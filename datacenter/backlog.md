@@ -24,7 +24,7 @@ updated: 2026-07-31
 - [x] `dc-02` 變壓器（transformer） — 2026-07-29 [卡片](devices/transformer.md)
 - [x] `dc-03` 中壓開關設備（MV switchgear）— 額定與保護 — 2026-07-30 [卡片](devices/mv-switchgear.md)
 - [x] `dc-03b` LSC 服務連續性分級與抽出式斷路器互鎖 — 2026-07-31 [卡片](devices/lsc-and-interlocks.md)
-- [ ] `dc-04` 自動切換開關 ATS（automatic transfer switch）
+- [x] `dc-04` 自動切換開關 ATS（automatic transfer switch） — 2026-08-03 [卡片](devices/ats-transfer-switch.md)
 - [ ] `dc-05` 柴油發電機（diesel generator）
 - [ ] `dc-06` 日用油箱與儲油槽（day tank / bulk fuel）
 - [ ] `dc-07` 低壓主配電盤（LV switchgear / main distribution board）
@@ -100,7 +100,7 @@ updated: 2026-07-31
 ## 進度
 
 - 總項目：62（2026-07-30 從 dc-03 拆出 dc-03b）
-- 已完成：4
+- 已完成：5
 - 預估完成：每週 5 項 → 約 13 週跑完第一到第四輪，加主題卡約 15–16 週（深度優先，慢一點沒關係）
 
 > 完成第一輪（電力鏈 16 項）時應該回頭做一次檢查：
