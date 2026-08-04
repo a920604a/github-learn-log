@@ -37,8 +37,8 @@ started: 2026-07-28
 ## 導覽
 
 - [完整 Roadmap](roadmap.md) — 六個月分階段、教材清單、驗收條件
-- [學習佇列](backlog.md) — 61 項，每個工作日消耗一項
-- 設備卡 — [市電進線](devices/utility-feed.md)、[變壓器](devices/transformer.md)、[中壓開關設備](devices/mv-switchgear.md)、[LSC 分級與互鎖](devices/lsc-and-interlocks.md)、[自動切換開關 ATS](devices/ats-transfer-switch.md)
+- [學習佇列](backlog.md) — 63 項，每個工作日消耗一項
+- 設備卡 — [市電進線](devices/utility-feed.md)、[變壓器](devices/transformer.md)、[中壓開關設備](devices/mv-switchgear.md)、[LSC 分級與互鎖](devices/lsc-and-interlocks.md)、[自動切換開關 ATS](devices/ats-transfer-switch.md)、[柴油發電機（額定與容量）](devices/diesel-generator.md)
 - [主題卡](topics/index.md) — 容量語意、協定、流程等非設備主題
 - [週報](weekly/index.md) — 每週彙整 + 自我測驗 + 間隔複習
 
@@ -46,10 +46,10 @@ started: 2026-07-28
 
 | 項目 | 狀態 |
 |---|---|
-| 佇列總數 | 62 |
-| 已完成 | 5 |
+| 佇列總數 | 63 |
+| 已完成 | 6 |
 | 目前輪次 | 第一輪：電力鏈 |
-| 下一張 | `dc-05` 柴油發電機 |
+| 下一張 | `dc-05b` 發電機起動時序、暫態性能與定期測試 |
 | 週報 | 1 份（最新：[2026-W31](weekly/2026-W31.md)） |
 | 下次間隔複習 | W33 抽 W31 的卡 |
 
