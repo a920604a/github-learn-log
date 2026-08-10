@@ -1,6 +1,6 @@
 ---
 track: datacenter
-updated: 2026-08-07
+updated: 2026-08-10
 ---
 
 # 學習佇列
@@ -29,7 +29,7 @@ updated: 2026-08-07
 - [x] `dc-05b` 發電機起動時序與暫態性能（ISO 8528-5） — 2026-08-05 [卡片](devices/genset-start-and-transient.md)
 - [x] `dc-05c` NFPA 110 定期測試制度、30% 門檻與 wet stacking — 2026-08-07 [卡片](devices/nfpa110-testing-and-wet-stacking.md)
       <!-- 2026-08-07 一併修正 dc-04 卡片「每年 4 小時 ≥30% 銘牌負載測試」的混淆說法 -->
-- [ ] `dc-06` 日用油箱與儲油槽（day tank / bulk fuel）
+- [x] `dc-06` 日用油箱與儲油槽（day tank / bulk fuel） — 2026-08-10 [卡片](devices/day-tank-and-bulk-fuel.md)
 - [ ] `dc-07` 低壓主配電盤（LV switchgear / main distribution board）
 - [ ] `dc-08` UPS 不斷電系統（雙轉換式）
 - [ ] `dc-09` UPS 電池組（鉛酸 VRLA vs 鋰電 LiB）
@@ -103,7 +103,7 @@ updated: 2026-08-07
 ## 進度
 
 - 總項目：64（2026-07-30 從 dc-03 拆出 dc-03b；2026-08-04 從 dc-05 拆出 dc-05b；2026-08-05 從 dc-05b 再拆出 dc-05c）
-- 已完成：8
+- 已完成：9
 - 預估完成：每週 5 項 → 約 13 週跑完第一到第四輪，加主題卡約 15–16 週（深度優先，慢一點沒關係）
 
 > 完成第一輪（電力鏈 16 項）時應該回頭做一次檢查：
