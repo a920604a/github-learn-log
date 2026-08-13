@@ -38,7 +38,7 @@ started: 2026-07-28
 
 - [完整 Roadmap](roadmap.md) — 六個月分階段、教材清單、驗收條件
 - [學習佇列](backlog.md) — 65 項，每個工作日消耗一項
-- 設備卡 — [市電進線](devices/utility-feed.md)、[變壓器](devices/transformer.md)、[中壓開關設備](devices/mv-switchgear.md)、[LSC 分級與互鎖](devices/lsc-and-interlocks.md)、[自動切換開關 ATS](devices/ats-transfer-switch.md)、[柴油發電機（額定與容量）](devices/diesel-generator.md)、[發電機起動時序與暫態性能](devices/genset-start-and-transient.md)、[NFPA 110 測試制度與 wet stacking](devices/nfpa110-testing-and-wet-stacking.md)、[日用油箱與儲油槽](devices/day-tank-and-bulk-fuel.md)、[低壓主配電盤（額定電流體系）](devices/lv-switchgear.md)、[低壓盤短路耐受與保護協調](devices/lv-short-circuit-and-coordination.md)
+- 設備卡 — [市電進線](devices/utility-feed.md)、[變壓器](devices/transformer.md)、[中壓開關設備](devices/mv-switchgear.md)、[LSC 分級與互鎖](devices/lsc-and-interlocks.md)、[自動切換開關 ATS](devices/ats-transfer-switch.md)、[柴油發電機（額定與容量）](devices/diesel-generator.md)、[發電機起動時序與暫態性能](devices/genset-start-and-transient.md)、[NFPA 110 測試制度與 wet stacking](devices/nfpa110-testing-and-wet-stacking.md)、[日用油箱與儲油槽](devices/day-tank-and-bulk-fuel.md)、[低壓主配電盤（額定電流體系）](devices/lv-switchgear.md)、[低壓盤短路耐受與保護協調](devices/lv-short-circuit-and-coordination.md)、[UPS 不斷電系統（雙轉換式）](devices/ups-double-conversion.md)
 - [主題卡](topics/index.md) — 容量語意、協定、流程等非設備主題
 - [週報](weekly/index.md) — 每週彙整 + 自我測驗 + 間隔複習
 
@@ -47,9 +47,9 @@ started: 2026-07-28
 | 項目 | 狀態 |
 |---|---|
 | 佇列總數 | 65 |
-| 已完成 | 11 |
+| 已完成 | 12 |
 | 目前輪次 | 第一輪：電力鏈 |
-| 下一張 | `dc-08` UPS 不斷電系統（雙轉換式） |
+| 下一張 | `dc-09` UPS 電池組（鉛酸 VRLA vs 鋰電 LiB） |
 | 週報 | 2 份（最新：[2026-W32](weekly/2026-W32.md)） |
 | 下次間隔複習 | W33 抽 W31 的卡（dc-01 ~ dc-03b） |
 | 待收斂的 model code | 7 項，前 3 項會產生錯誤數字（見 [W32 週報](weekly/2026-W32.md)） |

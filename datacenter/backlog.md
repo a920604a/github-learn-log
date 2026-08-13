@@ -1,6 +1,6 @@
 ---
 track: datacenter
-updated: 2026-08-12
+updated: 2026-08-13
 ---
 
 # 學習佇列
@@ -33,7 +33,7 @@ updated: 2026-08-12
 - [x] `dc-07` 低壓主配電盤 — 額定電流體系（InA / Inc / Ing / RDF） — 2026-08-11 [卡片](devices/lv-switchgear.md)
 - [x] `dc-07b` 低壓盤的短路耐受與保護協調（Icw / Ipk、選擇性協調、ZSI、arc flash 與 ERMS） — 2026-08-12 [卡片](devices/lv-short-circuit-and-coordination.md)
       <!-- 2026-08-11 從 dc-07 拆出：原稿 14238 字元，超過 10000 上限。額定語意與短路/保護是兩個主題 -->
-- [ ] `dc-08` UPS 不斷電系統（雙轉換式）
+- [x] `dc-08` UPS 不斷電系統（雙轉換式） — 2026-08-13 [卡片](devices/ups-double-conversion.md)
 - [ ] `dc-09` UPS 電池組（鉛酸 VRLA vs 鋰電 LiB）
 - [ ] `dc-10` 靜態切換開關 STS（static transfer switch）
 - [ ] `dc-11` PDU 配電單元（含變壓器型 / 非變壓器型）
@@ -105,7 +105,7 @@ updated: 2026-08-12
 ## 進度
 
 - 總項目：65（2026-07-30 從 dc-03 拆出 dc-03b；2026-08-04 從 dc-05 拆出 dc-05b；2026-08-05 從 dc-05b 再拆出 dc-05c；2026-08-11 從 dc-07 拆出 dc-07b）
-- 已完成：11
+- 已完成：12
 - 預估完成：每週 5 項 → 約 13 週跑完第一到第四輪，加主題卡約 15–16 週（深度優先，慢一點沒關係）
 
 > 完成第一輪（電力鏈 16 項）時應該回頭做一次檢查：
