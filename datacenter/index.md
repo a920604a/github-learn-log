@@ -38,7 +38,7 @@ started: 2026-07-28
 
 - [完整 Roadmap](roadmap.md) — 六個月分階段、教材清單、驗收條件
 - [學習佇列](backlog.md) — 66 項，每個工作日消耗一項
-- 設備卡 — [市電進線](devices/utility-feed.md)、[變壓器](devices/transformer.md)、[中壓開關設備](devices/mv-switchgear.md)、[LSC 分級與互鎖](devices/lsc-and-interlocks.md)、[自動切換開關 ATS](devices/ats-transfer-switch.md)、[柴油發電機（額定與容量）](devices/diesel-generator.md)、[發電機起動時序與暫態性能](devices/genset-start-and-transient.md)、[NFPA 110 測試制度與 wet stacking](devices/nfpa110-testing-and-wet-stacking.md)、[日用油箱與儲油槽](devices/day-tank-and-bulk-fuel.md)、[低壓主配電盤（額定電流體系）](devices/lv-switchgear.md)、[低壓盤短路耐受與保護協調](devices/lv-short-circuit-and-coordination.md)、[UPS 不斷電系統（雙轉換式）](devices/ups-double-conversion.md)、[UPS 電池組（VRLA vs 鋰電）](devices/ups-battery.md)
+- 設備卡 — [市電進線](devices/utility-feed.md)、[變壓器](devices/transformer.md)、[中壓開關設備](devices/mv-switchgear.md)、[LSC 分級與互鎖](devices/lsc-and-interlocks.md)、[自動切換開關 ATS](devices/ats-transfer-switch.md)、[柴油發電機（額定與容量）](devices/diesel-generator.md)、[發電機起動時序與暫態性能](devices/genset-start-and-transient.md)、[NFPA 110 測試制度與 wet stacking](devices/nfpa110-testing-and-wet-stacking.md)、[日用油箱與儲油槽](devices/day-tank-and-bulk-fuel.md)、[低壓主配電盤（額定電流體系）](devices/lv-switchgear.md)、[低壓盤短路耐受與保護協調](devices/lv-short-circuit-and-coordination.md)、[UPS 不斷電系統（雙轉換式）](devices/ups-double-conversion.md)、[UPS 電池組（VRLA vs 鋰電）](devices/ups-battery.md)、[電池測試制度（IEEE 1188）](devices/battery-testing-regime.md)
 - [主題卡](topics/index.md) — 容量語意、協定、流程等非設備主題
 - [週報](weekly/index.md) — 每週彙整 + 自我測驗 + 間隔複習
 
@@ -46,13 +46,13 @@ started: 2026-07-28
 
 | 項目 | 狀態 |
 |---|---|
-| 佇列總數 | 66 |
-| 已完成 | 13 |
+| 佇列總數 | 67 |
+| 已完成 | 14 |
 | 目前輪次 | 第一輪：電力鏈 |
-| 下一張 | `dc-09b` 電池測試制度與消防合規（IEEE 1188 / NFPA 855） |
+| 下一張 | `dc-09c` 鋰電消防合規（NFPA 855 / UL 9540A / off-gas 偵測） |
 | 週報 | 3 份（最新：[2026-W33](weekly/2026-W33.md)） |
 | 下次間隔複習 | W34 抽 W32 的卡（dc-04 ~ dc-05c）；**W35 起雙軌全開**（同時抽兩週前與四週前） |
-| 待收斂的 model code | 6 項，本週無錯誤數字但結構性欠款累積中；**`DeviceRegistry` 已欠三週，`dc-10` 之前必須補**（見 [W33 週報](weekly/2026-W33.md)） |
+| 待收斂的 model code | 7 項；**`DeviceRegistry` 已排進 [dc-09b](devices/battery-testing-regime.md) 加分題**，`dc-09c` 會在同一個 registry 上加第二種遍歷（沿防火區聚合）（見 [W33 週報](weekly/2026-W33.md)） |
 
 ## 提醒：有時效性的事
 

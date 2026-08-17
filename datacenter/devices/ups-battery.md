@@ -9,7 +9,7 @@ sources:
   - https://zincfive.com/blog/2021/04/07/ensuring-ess-safety-in-data-centers-with-nfpa-855-part-2/
   - https://mitsubishicritical.com/resources/frequently-asked-questions/lithium-ion/
   - https://datatracker.ietf.org/doc/html/rfc1628
-related: [dc-08, dc-09b, dc-10, dc-05]
+related: [dc-08, dc-09b, dc-09c, dc-10, dc-05]
 ---
 
 # UPS 電池組（battery string / bank）
@@ -54,7 +54,7 @@ N＝單串，**一顆 cell 開路整串退出**。N+1＝多並一串。2N＝A/B 
 
 ### 維護特性
 
-VRLA 三層：**月**目視與環境、**季**per-cell 內阻＋熱像、**年**扭力抽查＋容量放電測試。**容量測試要把 bank 拉去放電，那段時間 UPS 沒有電池**——必須跟發電機測試與另一路的維修窗口錯開排。鋰電近乎免維護，但多了 BMS 韌體與消防合規。制度細節見 `battery-testing-and-compliance`。
+VRLA 三層：**月**目視與環境、**季**per-cell 內阻＋熱像、**年**扭力抽查＋容量放電測試。**容量測試要把 bank 拉去放電，那段時間 UPS 沒有電池**——必須跟發電機測試與另一路的維修窗口錯開排。鋰電近乎免維護，但多了 BMS 韌體與消防合規。制度細節見[電池測試制度](battery-testing-regime.md)。
 
 ## 關鍵數字與計算
 
@@ -105,7 +105,7 @@ Peukert：`t₂ = t₁ × (I₁/I₂)^k`，VRLA 的 `k ≈ 1.2–1.3`，取 1.25
 
 拉到 10 分鐘：`1000 × (1/6) ÷ 0.96 ÷ 0.8 ≈ 217 kWh`——**能量、重量、體積同步加 67%**。VRLA 與鋰電在這裡分道揚鑣：WP229 的 1 MW／6 分鐘配置，VRLA 佔 5.4 m²、11,340 kg；鋰電 2.2 m²、2,767 kg（**約 1/4 重、1/2.5 面積**）。樓板承重與電池室面積是改不動的實體約束。
 
-這個 kWh 同時是消防法規的輸入——NFPA 855 對鋰電有每防火區的能量上限，直接決定一間電池室放得下幾台 UPS。細節見 `battery-testing-and-compliance`。
+這個 kWh 同時是消防法規的輸入——NFPA 855 對鋰電有每防火區的能量上限，直接決定一間電池室放得下幾台 UPS。細節見 `battery-fire-compliance`。
 
 ## 常見誤解
 
