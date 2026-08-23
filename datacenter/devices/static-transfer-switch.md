@@ -2,7 +2,7 @@
 id: dc-10
 title: 靜態切換開關 STS（static transfer switch）
 category: power
-written_at: 2026-08-23
+written_at: 2026-08-20
 sources:
   - https://ckm-content.se.com/ckmContent/sfc/servlet.shepherd/document/download/0698V00000TG63RQAT
   - https://www.eaton.com/content/dam/eaton/products/backup-power-ups-surge-it-power-distribution/power-distribution-for-it-equipment/pdi-static-transfer-switch/WaveStar-STS-Guide-Specification-250A-1600A.pdf
