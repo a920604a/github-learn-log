@@ -37,8 +37,8 @@ started: 2026-07-28
 ## 導覽
 
 - [完整 Roadmap](roadmap.md) — 六個月分階段、教材清單、驗收條件
-- [學習佇列](backlog.md) — 66 項，每個工作日消耗一項
-- 設備卡 — [市電進線](devices/utility-feed.md)、[變壓器](devices/transformer.md)、[中壓開關設備](devices/mv-switchgear.md)、[LSC 分級與互鎖](devices/lsc-and-interlocks.md)、[自動切換開關 ATS](devices/ats-transfer-switch.md)、[柴油發電機（額定與容量）](devices/diesel-generator.md)、[發電機起動時序與暫態性能](devices/genset-start-and-transient.md)、[NFPA 110 測試制度與 wet stacking](devices/nfpa110-testing-and-wet-stacking.md)、[日用油箱與儲油槽](devices/day-tank-and-bulk-fuel.md)、[低壓主配電盤（額定電流體系）](devices/lv-switchgear.md)、[低壓盤短路耐受與保護協調](devices/lv-short-circuit-and-coordination.md)、[UPS 不斷電系統（雙轉換式）](devices/ups-double-conversion.md)、[UPS 電池組（VRLA vs 鋰電）](devices/ups-battery.md)、[電池測試制度（IEEE 1188）](devices/battery-testing-regime.md)、[鋰電消防合規（NFPA 855 / UL 9540A）](devices/lib-fire-compliance.md)
+- [學習佇列](backlog.md) — 68 項，每個工作日消耗一項
+- 設備卡 — [市電進線](devices/utility-feed.md)、[變壓器](devices/transformer.md)、[中壓開關設備](devices/mv-switchgear.md)、[LSC 分級與互鎖](devices/lsc-and-interlocks.md)、[自動切換開關 ATS](devices/ats-transfer-switch.md)、[柴油發電機（額定與容量）](devices/diesel-generator.md)、[發電機起動時序與暫態性能](devices/genset-start-and-transient.md)、[NFPA 110 測試制度與 wet stacking](devices/nfpa110-testing-and-wet-stacking.md)、[日用油箱與儲油槽](devices/day-tank-and-bulk-fuel.md)、[低壓主配電盤（額定電流體系）](devices/lv-switchgear.md)、[低壓盤短路耐受與保護協調](devices/lv-short-circuit-and-coordination.md)、[UPS 不斷電系統（雙轉換式）](devices/ups-double-conversion.md)、[UPS 電池組（VRLA vs 鋰電）](devices/ups-battery.md)、[電池測試制度（IEEE 1188）](devices/battery-testing-regime.md)、[鋰電消防合規（NFPA 855 / UL 9540A）](devices/lib-fire-compliance.md)、[靜態切換開關 STS](devices/static-transfer-switch.md)
 - [主題卡](topics/index.md) — 容量語意、協定、流程等非設備主題
 - [週報](weekly/index.md) — 每週彙整 + 自我測驗 + 間隔複習
 
@@ -46,13 +46,13 @@ started: 2026-07-28
 
 | 項目 | 狀態 |
 |---|---|
-| 佇列總數 | 67 |
-| 已完成 | 15 |
+| 佇列總數 | 68 |
+| 已完成 | 16 |
 | 目前輪次 | 第一輪：電力鏈 |
-| 下一張 | `dc-10` 靜態切換開關 STS（static transfer switch） |
+| 下一張 | `dc-10b` STS 的兩源關係：相位同步、拓撲獨立性、雙母線容量會計 |
 | 週報 | 3 份（最新：[2026-W33](weekly/2026-W33.md)） |
 | 下次間隔複習 | W34 抽 W32 的卡（dc-04 ~ dc-05c）；**W35 起雙軌全開**（同時抽兩週前與四週前） |
-| 待收斂的 model code | 8 項；`DeviceRegistry` 的第二種遍歷（沿 `FireCompartment` 聚合能量）已在 [dc-09c](devices/lib-fire-compliance.md) 出題，**兩棵樹共用節點但邊不同**是 `dc-10` STS 之前的地基（見 [W33 週報](weekly/2026-W33.md)） |
+| 待收斂的 model code | 8 項；**`DeviceRegistry` 已到期**——[dc-10](devices/static-transfer-switch.md) 第四次要求邊要有身分（`active_source` 住在邊上），`dc-10b` 的動手練習就是把它建出來（見 [W33 週報](weekly/2026-W33.md)） |
 
 ## 提醒：有時效性的事
 
