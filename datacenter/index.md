@@ -52,7 +52,7 @@ started: 2026-07-28
 | 下一張 | `dc-10b` STS 的兩源關係：相位同步、拓撲獨立性、雙母線容量會計 |
 | 週報 | 4 份（最新：[2026-W34](weekly/2026-W34.md)） |
 | 下次間隔複習 | W35 **雙軌全開**：抽 W33 的卡（dc-06 ~ dc-09）＋ W31 的卡（dc-01 ~ dc-03b，第二次） |
-| 待收斂的 model code | 9 項；**第一順位是 [dc-09](devices/ups-battery.md) 的 `energy_kwh()` 改名**（已打折的數字被拿去做合規聚合，會靜默少 20%）；`DeviceRegistry` 欠四週，[dc-10b](backlog.md) 的動手練習會清掉（見 [W34 週報](weekly/2026-W34.md)） |
+| 待收斂的 model code | 9 項；**第一順位是 `Alarm.latched` + `ack()` 不得改變 `active()`**（[dc-10](devices/static-transfer-switch.md)，本週唯一的安全性缺陷，約 30 分鐘）；第二順位是 [dc-09](devices/ups-battery.md) 的 `energy_kwh()` 改名（已打折的數字被拿去做合規聚合，會靜默少 20%）；`DeviceRegistry` 欠四週，[dc-10b](backlog.md) 的動手練習會清掉（見 [W34 週報](weekly/2026-W34.md)） |
 
 ## 提醒：有時效性的事
 
