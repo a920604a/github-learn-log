@@ -43,7 +43,7 @@ updated: 2026-08-20
       <!-- 2026-08-18 來源分歧：NFPA 855 2023 版有 50/250/600 kWh 能量表，2026 版把該表移除、改成 HMA 預設。
            兩版並存（IFC 2024 仍引 2023 版文字），卡片裡明寫並要求 CodeRule 版本化 -->
 - [x] `dc-10` 靜態切換開關 STS（static transfer switch）— 設備本體、SCR 與故障狀態機 — 2026-08-20 [卡片](devices/static-transfer-switch.md)
-- [ ] `dc-10b` STS 的兩源關係：相位同步窗與頻率漂移、拓撲獨立性（common ancestor）、雙母線容量會計（枚舉配置取 max）
+- [x] `dc-10b` STS 的兩源關係（一）：拓撲獨立性（common ancestor）與雙母線容量會計（枚舉配置取 max） — 2026-08-24 [卡片](devices/sts-two-source-relationship.md)
       <!-- 2026-08-20 從 dc-10 拆出：原稿 14075 字元，遠超 10000 上限。
            「一台 STS 內部怎麼運作」與「兩個源之間的關係」是兩個主題，資料模型需求也不同：
            前者是單一實體的狀態機，後者需要 PowerEdge 有身分 + DeviceRegistry 全圖查詢。
