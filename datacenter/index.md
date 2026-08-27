@@ -38,7 +38,7 @@ started: 2026-07-28
 
 - [完整 Roadmap](roadmap.md) — 六個月分階段、教材清單、驗收條件
 - [學習佇列](backlog.md) — 68 項，每個工作日消耗一項
-- 設備卡 — [市電進線](devices/utility-feed.md)、[變壓器](devices/transformer.md)、[中壓開關設備](devices/mv-switchgear.md)、[LSC 分級與互鎖](devices/lsc-and-interlocks.md)、[自動切換開關 ATS](devices/ats-transfer-switch.md)、[柴油發電機（額定與容量）](devices/diesel-generator.md)、[發電機起動時序與暫態性能](devices/genset-start-and-transient.md)、[NFPA 110 測試制度與 wet stacking](devices/nfpa110-testing-and-wet-stacking.md)、[日用油箱與儲油槽](devices/day-tank-and-bulk-fuel.md)、[低壓主配電盤（額定電流體系）](devices/lv-switchgear.md)、[低壓盤短路耐受與保護協調](devices/lv-short-circuit-and-coordination.md)、[UPS 不斷電系統（雙轉換式）](devices/ups-double-conversion.md)、[UPS 電池組（VRLA vs 鋰電）](devices/ups-battery.md)、[電池測試制度（IEEE 1188）](devices/battery-testing-regime.md)、[鋰電消防合規（NFPA 855 / UL 9540A）](devices/lib-fire-compliance.md)、[靜態切換開關 STS](devices/static-transfer-switch.md)
+- 設備卡 — [市電進線](devices/utility-feed.md)、[變壓器](devices/transformer.md)、[中壓開關設備](devices/mv-switchgear.md)、[LSC 分級與互鎖](devices/lsc-and-interlocks.md)、[自動切換開關 ATS](devices/ats-transfer-switch.md)、[柴油發電機（額定與容量）](devices/diesel-generator.md)、[發電機起動時序與暫態性能](devices/genset-start-and-transient.md)、[NFPA 110 測試制度與 wet stacking](devices/nfpa110-testing-and-wet-stacking.md)、[日用油箱與儲油槽](devices/day-tank-and-bulk-fuel.md)、[低壓主配電盤（額定電流體系）](devices/lv-switchgear.md)、[低壓盤短路耐受與保護協調](devices/lv-short-circuit-and-coordination.md)、[UPS 不斷電系統（雙轉換式）](devices/ups-double-conversion.md)、[UPS 電池組（VRLA vs 鋰電）](devices/ups-battery.md)、[電池測試制度（IEEE 1188）](devices/battery-testing-regime.md)、[鋰電消防合規（NFPA 855 / UL 9540A）](devices/lib-fire-compliance.md)、[靜態切換開關 STS](devices/static-transfer-switch.md)、[STS 的兩源關係](devices/sts-two-source-relationship.md)、[PDU 配電單元](devices/pdu-floor.md)
 - [主題卡](topics/index.md) — 容量語意、協定、流程等非設備主題
 - [週報](weekly/index.md) — 每週彙整 + 自我測驗 + 間隔複習
 
@@ -47,12 +47,13 @@ started: 2026-07-28
 | 項目 | 狀態 |
 |---|---|
 | 佇列總數 | 68 |
-| 已完成 | 16 |
+| 已完成 | 18 |
 | 目前輪次 | 第一輪：電力鏈 |
-| 下一張 | `dc-10b` STS 的兩源關係：相位同步、拓撲獨立性、雙母線容量會計 |
+| 下一張 | `dc-12` RPP 遠端配電盤（remote power panel） |
 | 週報 | 4 份（最新：[2026-W34](weekly/2026-W34.md)） |
 | 下次間隔複習 | W35 **雙軌全開**：抽 W33 的卡（dc-06 ~ dc-09）＋ W31 的卡（dc-01 ~ dc-03b，第二次） |
-| 待收斂的 model code | 9 項；**第一順位是 [dc-09](devices/ups-battery.md) 的 `energy_kwh()` 改名**（已打折的數字被拿去做合規聚合，會靜默少 20%）；`DeviceRegistry` 欠四週，[dc-10b](backlog.md) 的動手練習會清掉（見 [W34 週報](weekly/2026-W34.md)） |
+| 待收斂的 model code | 9 項；**第一順位仍是 [dc-09](devices/ups-battery.md) 的 `energy_kwh()` 改名**——[dc-11](devices/pdu-floor.md) 第二次撞上同一形狀（NetBox `available_power` 已乘 80% 卻叫 available），並就地立下規約：**打折的一律 `_derated`、未打折一律 `_nameplate`，不准有無後綴版本**。`DeviceRegistry` 已於 dc-10b 兌現 |
+| 待裁決 | `devices/` 下有**兩張 dc-10b 卡片**（`sts-two-source-relationship.md` 與 `sts-dual-source-relationship.md`），佇列只連前者；詳見 [backlog](backlog.md) 註解 |
 
 ## 提醒：有時效性的事
 
