@@ -38,7 +38,7 @@ started: 2026-07-28
 
 - [完整 Roadmap](roadmap.md) — 六個月分階段、教材清單、驗收條件
 - [學習佇列](backlog.md) — 69 項，每個工作日消耗一項
-- 設備卡 — [市電進線](devices/utility-feed.md)、[變壓器](devices/transformer.md)、[中壓開關設備](devices/mv-switchgear.md)、[LSC 分級與互鎖](devices/lsc-and-interlocks.md)、[自動切換開關 ATS](devices/ats-transfer-switch.md)、[柴油發電機（額定與容量）](devices/diesel-generator.md)、[發電機起動時序與暫態性能](devices/genset-start-and-transient.md)、[NFPA 110 測試制度與 wet stacking](devices/nfpa110-testing-and-wet-stacking.md)、[日用油箱與儲油槽](devices/day-tank-and-bulk-fuel.md)、[低壓主配電盤（額定電流體系）](devices/lv-switchgear.md)、[低壓盤短路耐受與保護協調](devices/lv-short-circuit-and-coordination.md)、[UPS 不斷電系統（雙轉換式）](devices/ups-double-conversion.md)、[UPS 電池組（VRLA vs 鋰電）](devices/ups-battery.md)、[電池測試制度（IEEE 1188）](devices/battery-testing-regime.md)、[鋰電消防合規（NFPA 855 / UL 9540A）](devices/lib-fire-compliance.md)、[靜態切換開關 STS](devices/static-transfer-switch.md)、[STS 兩源關係（一）拓撲獨立性與容量會計](devices/sts-two-source-relationship.md)、[STS 兩源關係（二）相位同步窗](devices/sts-source-synchronization.md)、[PDU 配電單元](devices/pdu-floor.md)
+- 設備卡 — [市電進線](devices/utility-feed.md)、[變壓器](devices/transformer.md)、[中壓開關設備](devices/mv-switchgear.md)、[LSC 分級與互鎖](devices/lsc-and-interlocks.md)、[自動切換開關 ATS](devices/ats-transfer-switch.md)、[柴油發電機（額定與容量）](devices/diesel-generator.md)、[發電機起動時序與暫態性能](devices/genset-start-and-transient.md)、[NFPA 110 測試制度與 wet stacking](devices/nfpa110-testing-and-wet-stacking.md)、[日用油箱與儲油槽](devices/day-tank-and-bulk-fuel.md)、[低壓主配電盤（額定電流體系）](devices/lv-switchgear.md)、[低壓盤短路耐受與保護協調](devices/lv-short-circuit-and-coordination.md)、[UPS 不斷電系統（雙轉換式）](devices/ups-double-conversion.md)、[UPS 電池組（VRLA vs 鋰電）](devices/ups-battery.md)、[電池測試制度（IEEE 1188）](devices/battery-testing-regime.md)、[鋰電消防合規（NFPA 855 / UL 9540A）](devices/lib-fire-compliance.md)、[靜態切換開關 STS](devices/static-transfer-switch.md)、[STS 兩源關係（一）拓撲獨立性與容量會計](devices/sts-two-source-relationship.md)、[STS 兩源關係（二）相位同步窗](devices/sts-source-synchronization.md)、[PDU 配電單元](devices/pdu-floor.md)、[RPP 遠端配電盤](devices/rpp-remote-power-panel.md)
 - [主題卡](topics/index.md) — 容量語意、協定、流程等非設備主題
 - [週報](weekly/index.md) — 每週彙整 + 自我測驗 + 間隔複習
 
@@ -47,12 +47,13 @@ started: 2026-07-28
 | 項目 | 狀態 |
 |---|---|
 | 佇列總數 | 69 |
-| 已完成 | 19 |
+| 已完成 | 20 |
 | 目前輪次 | 第一輪：電力鏈 |
-| 下一張 | `dc-12` RPP 遠端配電盤（remote power panel） |
+| 下一張 | `dc-13` 匯流排 busway / 插接箱（tap-off box） |
 | 週報 | 4 份（最新：[2026-W34](weekly/2026-W34.md)） |
 | 下次間隔複習 | W35 **雙軌全開**：抽 W33 的卡（dc-06 ~ dc-09）＋ W31 的卡（dc-01 ~ dc-03b，第二次） |
-| 待收斂的 model code | 9 項；**第一順位仍是 [dc-09](devices/ups-battery.md) 的 `energy_kwh()` 改名**——[dc-11](devices/pdu-floor.md) 第二次撞上同一形狀（NetBox `available_power` 已乘 80% 卻叫 available），並就地立下規約：**打折的一律 `_derated`、未打折一律 `_nameplate`，不准有無後綴版本**。`DeviceRegistry` 已於 dc-10b 兌現，[dc-10c](devices/sts-source-synchronization.md) 在同一張圖上加了第二種遍歷 |
+| 待收斂的 model code | 10 項；**第一順位仍是 [dc-09](devices/ups-battery.md) 的 `energy_kwh()` 改名**——[dc-11](devices/pdu-floor.md) 第二次撞上同一形狀（NetBox `available_power` 已乘 80% 卻叫 available），並就地立下規約：**打折的一律 `_derated`、未打折一律 `_nameplate`**。`DeviceRegistry` 已於 dc-10b 兌現，[dc-10c](devices/sts-source-synchronization.md) 在同一張圖上加了第二種遍歷 |
+| **dc-11 待回頭修** | [dc-12](devices/rpp-remote-power-panel.md) 找出兩個錯：**(1) ×0.80 不是常數**，是「80% rated 斷路器＋外殼」的屬性（IEM 的 RPP 標配 100% rated，同一顆 400 A 差 8.7 個機櫃）→ `_derated` 後綴不夠，還要 `derating_basis`；**(2)「算得出來的一律不存」有例外**——插拔式母線上相位是插法不是位置 → 把前提變成欄位 `Panelboard.phase_mode` |
 
 ## 提醒：有時效性的事
 
