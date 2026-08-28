@@ -1,0 +1,35 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Skill(schedule)",
+      "Bash(git fetch *)",
+      "WebSearch",
+      "Bash(gh repo *)",
+      "Bash(git remote *)",
+      "Bash(curl -sI https://api.github.com/repos/a920604a/github-learn-log)",
+      "Bash(git ls-remote *)",
+      "Bash(.venv/bin/mkdocs build *)",
+      "Bash(mkdir -p _docs)",
+      "Bash(ln -sf ../index.md .)",
+      "Bash(ln -sf ../Home.md .)",
+      "Bash(ln -sf ../glossary.md .)",
+      "Bash(ln -sf ../daily .)",
+      "Bash(.venv/bin/pip install *)",
+      "Bash(/Users/chenyuan/Desktop/side-projects/github-learn-log/.venv/bin/mkdocs --version)",
+      "Bash(/Users/chenyuan/Desktop/side-projects/github-learn-log/.venv/bin/mkdocs build *)",
+      "Bash(/Users/chenyuan/Desktop/side-projects/github-learn-log/.venv/bin/pip list *)",
+      "Bash(grep -oE \"md-nav__link[^>]*>[^<]{1,50}\" site/index.html)",
+      "Bash(python3 *)",
+      "Bash(/Users/chenyuan/Desktop/side-projects/github-learn-log/.venv/bin/mkdocs serve *)",
+      "Bash(curl -sI http://127.0.0.1:8765/)",
+      "Bash(git ls-tree *)",
+      "mcp__plugin_discord_discord__fetch_messages",
+      "Bash(curl *)",
+      "Bash(grep -E \"\\\\.github|\\\\.git$\")",
+      "Bash(date -v-mon -v+0d +%Y-%m-%d)",
+      "Bash(git push *)"
+    ]
+  }
+}
