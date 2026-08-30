@@ -50,11 +50,11 @@ started: 2026-07-28
 | 已完成 | 21 |
 | 目前輪次 | 第一輪：電力鏈 |
 | 下一張 | `dc-14` 機櫃電源 rack PDU（basic / metered / switched） |
-| 週報 | 4 份（最新：[2026-W34](weekly/2026-W34.md)） |
-| 下次間隔複習 | W35 **雙軌全開**：抽 W33 的卡（dc-06 ~ dc-09）＋ W31 的卡（dc-01 ~ dc-03b，第二次） |
-| 待收斂的 model code | 10 項；**第一順位仍是 [dc-09](devices/ups-battery.md) 的 `energy_kwh()` 改名**——[dc-11](devices/pdu-floor.md) 第二次撞上同一形狀（NetBox `available_power` 已乘 80% 卻叫 available），並就地立下規約：**打折的一律 `_derated`、未打折一律 `_nameplate`**。`DeviceRegistry` 已於 dc-10b 兌現，[dc-10c](devices/sts-source-synchronization.md) 在同一張圖上加了第二種遍歷 |
-| **dc-11 待回頭修** | [dc-12](devices/rpp-remote-power-panel.md) 找出兩個錯：**(1) ×0.80 不是常數**，是「80% rated 斷路器＋外殼」的屬性（IEM 的 RPP 標配 100% rated，同一顆 400 A 差 8.7 個機櫃）→ `_derated` 後綴不夠，還要 `derating_basis`；**(2)「算得出來的一律不存」有例外**——插拔式母線上相位是插法不是位置 → 把前提變成欄位 `Panelboard.phase_mode` |
-| **dc-12 待回頭修** | [dc-13](devices/busway-and-tap-off-box.md) 找出一個錯：**`requires_outage_to_add_circuit: bool` 不夠用**。OSHA 2025-08-25 解釋函（引 NFPA 70E table 130.5(C)）確認 busway 插接箱插拔屬能量作業——不停機但要工單＋合格人員＋PPE。布林會把它錯分到「不用管」→ 改三態 `change_class` |
+| 週報 | 5 份（最新：[2026-W35](weekly/2026-W35.md)） |
+| 下次間隔複習 | W36：抽 W34 的卡（dc-09b ~ dc-10）＋ W32 的卡（dc-04 ~ dc-05c，第二次） |
+| 待收斂的 model code | 11 項。W35 清掉四項舊帳（`DeviceRegistry` ✅ 欠四週終於兌現、`Bound` 值物件 ✅ 用在 `Angle(deg, kind)`、`Alarm`／`Finding` 循環依賴澄清 ✅、兩棵樹橫向邊 ✅）。**新第一順位是 `Finding` 定義 ＋ 三處 `validate() -> list[str]` 改回 `list[Finding]`**——必須在 `dc-14` 之前，否則第四張卡照抄。第二順位 **`CapacityReport` 統一**（`dc-11`／`dc-12`／`dc-13` 三種回傳型別互不相交，`dc-13` 加分題現在就寫不出來）。[dc-09](devices/ups-battery.md) 的 `energy_kwh()` 改名**連續第二週掛第一順位卻沒做**，10 分鐘 |
+| **dc-11 待回頭修** | 兩張卡各找出一個錯。[dc-12](devices/rpp-remote-power-panel.md)：**(1) ×0.80 不是常數**，是「80% rated 斷路器＋列名外殼」這個組合的屬性（同一顆 400 A 差 8.7 個機櫃）→ 要 `derating_basis`；**(2)「算得出來的一律不存」有例外**——插拔式母線上相位是插法不是位置 → 把前提變成欄位 `Panelboard.phase_mode`。另 `Pdu.kva_derated()` 把 0.80 寫死，是目前唯一會改變既有數字的修正 |
+| **dc-12 待回頭修** | [dc-13](devices/busway-and-tap-off-box.md) 找出一個錯：**`requires_outage_to_add_circuit: bool` 不夠用**。OSHA 2025-08-25 解釋函（引 NFPA 70E table 130.5(C)）確認 busway 插接箱插拔屬能量作業——不停機但要工單＋合格人員＋PPE。布林會把它錯分到「不用管」→ 改三態 `change_class`。另 `Breaker`／`Panelboard` 被 dc-11／dc-12 各定義一次且欄位不相容（`load_kw` 遺失 → dc-11 的不平衡計算會壞） |
 
 ## 提醒：有時效性的事
 
