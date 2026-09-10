@@ -381,7 +381,64 @@ updated: 2026-09-08
       <!-- 2026-09-08 **單線圖對照盤點仍未做**（承 dc-17／dc-18／dc-19 註記）。 -->
       <!-- 2026-09-08 dc-21 接得上：本卡的 ride-through 是「冰機停了怎麼撐」，
            板式熱交換器／free cooling 則是「冰機可以少開多久」——同一條熱鏈的另一種容量來源。 -->
-- [ ] `dc-21` 板式熱交換器與免費冷卻（plate HX / free cooling）
+- [x] `dc-21` 板式熱交換器與免費冷卻（plate HX / free cooling） — 2026-09-10 [卡片](devices/plate-hx-free-cooling.md)
+      <!-- 2026-09-10 **本卡是第一個「容量的自變數是決策而非物理」的設備。** dc-16 的 `scenario`（故障情境）
+           與 dc-17 的 `env`（濕球）都是外生的；`mode ∈ {mechanical, integrated, free}` 是控制系統選的。
+           而**跨模式 binding 完全不同**——free 模式下冰機根本不在圖上，binding 是 HX approach 與塔格數。
+           → `binding()` 已是 per-resource（dc-17）× per-kind（dc-20），現在再加 **per-mode**。 -->
+      <!-- 2026-09-10 **第一個帶記憶的約束。** 前 20 張所有 Constraint 都是當下狀態的純函數；
+           模式切換必須有遲滯與最短駐留（`ModePolicy(enter_wb_c, exit_wb_c, min_dwell_s)`），
+           enter == exit 會讓濕球在門檻附近抖動時冰機反覆起停。而切換動作本身開了脆弱窗口：
+           冰機停了要 10–15 分鐘回來（dc-18），ride-through 只有 5.2 分鐘（dc-18）
+           → `CapacityReport.recovery_until`（dc-20 立的）第二次派上用場。 -->
+      <!-- 2026-09-10 **本卡的實務結論一句話：free cooling 小時數不是氣候的函數，是冰水設定值的函數。**
+           門檻濕球 = T_chws − a_tower − ΔT_load(1−ε)/ε。取 a_tower = 4 K、ΔT = 6 K、ε = 0.75：
+           7 °C 冰水門檻 **1 °C**、18 °C 冰水門檻 **12 °C**。同一座台北機房，前者一年 0 小時、後者冬季可觀。
+           塔加大只能把 a_tower 4 → 2（門檻 +2 K），冰水 7 → 18 是 +11 K。**先確認在哪一列再談設備。** -->
+      <!-- 2026-09-10 **「設施 vs IT 管理平面」第三次穿越**（前兩次：dc-16 的 iDRAC `psu_policy`、
+           dc-19 的 BMS 流量變化率）：`chws_setpoint` 的真正擁有者是 IT——機櫃進風上限從 27 收到 22 °C，
+           會在設施側砍掉整年的 free cooling，**而沒有任何一張設施表會顯示這件事發生過**。
+           → `chws_setpoint` 要帶 `derived_from`（ASHRAE class ＋ 盤管選型）與 `changed_by`。 -->
+      <!-- 2026-09-10 **`Dimension.proxy_for`：熱性能衰減只能從液壓側可靠地看見。**
+           ΔP 有明確判準（同流量 +15–20% vs clean baseline）；approach 同時被流量、進水溫、負載污染。
+           且 baseline **是曲線不是單點**（ΔP ∝ Q^1.8）——70% 流量時期望 ΔP 是 23.7 不是 45 kPa，
+           不對齊流量就比較 ΔP 會把節流看成變乾淨。繼 dc-09b 電池 baseline、dc-19 rate limiter 之後
+           第三個「沒有 commissioning 產出就沒有告警規則」的欄位。 -->
+      <!-- 2026-09-10 **HX 是熱鏈上第一個純被動、不吃電的主設備——但它的閥吃電。**
+           本體不在電力樹上，`lose_a` 傳不進來；切換閥與致動器在。
+           → 兩棵樹橫向邊第一次是「主設備不在電力樹、致動器在」，`fault_domain` 指向閥的電源。 -->
+      <!-- 2026-09-10 來源分歧（一）：**「free cooling 門檻」至少指三件事，數字差 18 K。**
+           ASHRAE 90.1 6.5.1.2.1 是**法規最低能力要求**（50 °F DB / 45 °F WB 供 100% 負載；
+           電腦機房例外 40/35 蒸發式、35 DB 乾冷卻式）；學術文獻給的**系統獲益上限**是濕球 16 °C；
+           Alfa Laval 文案「濕球 < 25 °C 的氣候就適合」是**市場適用性**。寫進同一份規格書會打架。 -->
+      <!-- 2026-09-10 來源分歧（二）：**板式 HX 要不要給 fouling factor。** 殼管式傳統給 0.0005 m²·K/W
+           換算成 +30% 面積；板式廠商（Masterflow）明確反對——加板片降低通道流速與壁面剪應力，
+           **反而讓沉積更容易附著**。後果具體：兩派選型出來的板數與 clean ΔP 不同，
+           而髒污告警 baseline 正是建在那個 clean ΔP 上。分歧（三）：墊片壽命 3–10 年 vs
+           輕負荷 5 年／嚴苛 12 個月／典型 3 年 → 沿用 dc-17 的 `MaintenanceRule` 帶 jurisdiction+source+version。 -->
+      <!-- 2026-09-10 **合規點 ≠ 出得了力**（Deppmann 實例）：同一組設備在 WB 33 °F 可行（CHWS 46.8 °F），
+           搬到法規起始點 WB 45 °F 時冰水均溫 59.1 °F，末端盤管**顯熱出力 <25%、潛熱 0%**。
+           法規保證的是「換熱器傳得動 100% 的熱」不是「末端吐得出 100% 的冷」。那是 dc-22 的題目。 -->
+      <!-- 2026-09-10 未查證：**台北濕球的權威時數分布**（卡內只說「冬季最冷月典型仍在 10 °C 以上」
+           並標為需拿中央氣象署 TMY 驗證），以及台灣有無等同 ASHRAE 90.1 economizer 的強制條文。
+           另：ε = 0.75、a_tower = 4 K、clean ΔP 45 kPa、ΔP 指數 1.8 全是假設值。 -->
+      <!-- 2026-09-10 wc -m = 9307，未拆卡、未壓縮。 -->
+      <!-- 2026-09-10 ⚠ **本日發現的 repo 級問題（跟 dc-21 內容無關，但會影響已發布的 5 張卡）**：
+           `mkdocs.yml` 的 markdown_extensions 沒有 `pymdownx.arithmatex`，也沒有 extra_javascript 掛 MathJax。
+           但 `pdu-floor` / `sts-two-source-relationship` / `npsh-and-pump-placement`（2 處）/
+           `lib-fire-compliance` / `plate-hx-free-cooling` 共 5 張卡 6 處用了 `$$...$$` 區塊
+           → **在 CF Pages 上會印出字面的 `$$\mathrm{...}$$`，跟當初 wikilink 的坑同一類**。
+           修法是 mkdocs.yml 加 `pymdownx.arithmatex: {generic: true}` ＋ extra_javascript 掛 MathJax，
+           但本次沙箱掛掉無法 build 驗證，**不敢動 mkdocs.yml**（改壞會擋住整個 CF Pages 部署）。
+           留給使用者本機驗證後再改。 -->
+      <!-- 2026-09-10 ⚠ **本日排程未能 commit**：沙箱在裝 mkdocs 時磁碟寫滿，之後 bash 環境整個失效
+           （`Failed to create bridge sockets`，重試 15 次未恢復）。
+           卡片與 backlog／index 都已寫入本機資料夾，但**沒有 commit，launchd 也就不會 push**。
+           需使用者本機執行 `git add -A && git commit -m "feat(dc): card dc-21 plate-hx-free-cooling"`。
+           全程只跑過 `git log` / `git status`（唯讀），**沒有殘留 lock 檔**。 -->
+      <!-- 2026-09-10 **單線圖對照盤點仍未做**（承 dc-17 ~ dc-20 註記）。 -->
+      <!-- 2026-09-10 dc-22 接得上：本卡演算三留下的「換熱器過關、盤管不過關」正是 CRAH 的 LMTD 問題，
+           而演算一那張表的 `T_chws` 從哪來，答案也在 CRAH 的盤管選型裡。 -->
 - [ ] `dc-22` CRAH 機房空調（冰水式）
 - [ ] `dc-23` CRAC 精密空調（直膨式）
 - [ ] `dc-24` 加濕與除濕（humidification / dehumidification）
@@ -437,7 +494,7 @@ updated: 2026-09-08
 ## 進度
 
 - 總項目：70（2026-09-07 從 dc-19 拆出 dc-19b；2026-07-30 從 dc-03 拆出 dc-03b；2026-08-04 從 dc-05 拆出 dc-05b；2026-08-05 從 dc-05b 再拆出 dc-05c；2026-08-11 從 dc-07 拆出 dc-07b；2026-08-14 從 dc-09 拆出 dc-09b；2026-08-17 從 dc-09b 再拆出 dc-09c；2026-08-20 從 dc-10 拆出 dc-10b；2026-08-27 從 dc-10b 再拆出 dc-10c）
-- 已完成：29（2026-09-09 dc-19b **回補第一輪拆出的欠項**；2026-09-08 dc-20；2026-09-07 dc-19；2026-09-04 dc-18；2026-09-03 dc-17 **第二輪冷卻鏈開工**；第一輪電力鏈 dc-01 ~ dc-16 已於 2026-09-02 全數完成）
+- 已完成：30（2026-09-10 dc-21；2026-09-09 dc-19b **回補第一輪拆出的欠項**；2026-09-08 dc-20；2026-09-07 dc-19；2026-09-04 dc-18；2026-09-03 dc-17 **第二輪冷卻鏈開工**；第一輪電力鏈 dc-01 ~ dc-16 已於 2026-09-02 全數完成）
 - 預估完成：每週 5 項 → 約 13 週跑完第一到第四輪，加主題卡約 15–16 週（深度優先，慢一點沒關係）
 
 > 完成第一輪（電力鏈 16 項）時應該回頭做一次檢查：
