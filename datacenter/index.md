@@ -47,9 +47,10 @@ started: 2026-07-28
 | 項目 | 狀態 |
 |---|---|
 | 佇列總數 | 73（2026-09-28 從 dc-30 拆出 `dc-30b` 線槽走線架；2026-09-21 從 dc-26 拆出 `dc-26b` CDU 額定與可比較性；2026-09-17 從 dc-25 拆出 `dc-25b`；2026-09-07 從 dc-19 拆出 `dc-19b`） |
-| 已完成 | 44 |
+| 已完成 | 45 |
 | 目前輪次 | **第三輪：空間、消防、安全**（2026-09-24 由 [dc-28 空間層級](devices/space-hierarchy.md) 開工）。第二輪冷卻鏈 dc-17 ~ dc-27 已於 2026-09-23 完成；第一輪電力鏈 dc-01 ~ dc-16 已於 2026-09-02 全數完成 |
-| 下一張 | `dc-33` 氣體滅火系統與消防警報盤 |
+| 下一張 | `dc-34` 門禁控制器、讀卡機、人員通道閘 |
+| 🔴 **釋放盤：cross-zone 讓一條迴路被隔離就使自動釋放不可達** | **[dc-33](devices/gas-suppression-release-panel.md)（2026-10-05）。** Novec 1230 `W=V/S×C/(100−C)`，288 m³／20 °C：ISO 14520（5.3%）**224.2 kg** vs NFPA 2001（4.5%）**188.8 kg**（差 19%）；85% 規則 4.505%；煙進孔到藥到位 121.7+30+10 = **161.7 s**（天真 81.6 s）。新告警 `RELEASE_PATH_DEGRADED`／`RELEASE_LOCKED_OUT`（第三個「缺東西」）。**來源分歧**：保持時間 10／5／30 分鐘、NFPA vs ISO 濃度與洩漏模型；NFPA／ISO 原文與台灣法規未取得。W40 交辦的 `core.py`／`rack.py` 收斂放進練習第 0 步 |
 | 🔴 **夾層裡的三個租客（W40 母題）** | **[2026-W40 週報](weekly/2026-W40.md)（4 張卡、09-30 無卡）。** 地板下夾層同時被送風（dc-30）、線槽（dc-30b）、取樣管（dc-32）佔用，卻沒有聚合物件替它負責；dc-30b 槽長 → dc-31 `perm_max` 是第一條跨卡**數值依賴**（同一條 80 m 固定線，10 m 跳線 OK、15 m 跳線 VIOLATED）。**連貫性檢視**：🔴1 `Rack` 合一只合一半（dc-30 缺 `mounts`，dc-31 加分題的 `Rack.mount` 落空）；🔴2 `Check` 四份副本；🔴3 `Sourced` 文字要求、骨架規則表全是裸 dict。三項排進 dc-33 練習第 0 步（建 `core.py`／`rack.py`）。🟡 `outer_w_mm` vs `width_mm`、`NemaClass` 跨距缺分支、`Alert` vs `Finding` 撞名。間隔複習：dc-25（W38）、dc-18（W36） |
 | 🔴 **VESDA 是取樣網路不是感測器** | **[dc-32](devices/vesda-aspirating-smoke-detection.md)（2026-10-02）。** 孔稀釋：單孔等效靈敏度 = 門檻×N/k（80 孔、0.1 %obs/m → 單孔要 8.0 %obs/m）；傳輸時間理想化推導 t=(L·A/Q)·H_N，60 m／30 L/min／10 孔 天真 41.6 s、修正後 121.7 s（假設值，不可設計用）。新 Finding `DETECTION_COVERAGE_GAP`（第二個「缺東西」告警）；來源分歧：傳輸時間上限 60／90／120 s 三套說法，標準原文未取得、不裁決 |
 | 🔴 **連線不等於一條線：固定線＋跳線＋降額，前後埠對應是資料** | **[dc-31](devices/structured-cabling-patch-panel.md)（2026-10-01）。** 固定線 90 m ＋ 跳線 10 m = channel 100 m；28 AWG 跳線降額 `perm_max = 102 − 1.95L`（10 m → **82.5**、15 m → **72.75**，Fluke 的 73 四捨五入會超標，須 floor）；Cat 8 = 24 + 3 + 3 = **30 m**、≤2 連接點。ZDA ≤144 連接／≤1 個／無 cross-connect（來源為 TIA-942 原版，942-C 未驗證）；直連僅限同或相鄰機櫃；942-C 交換器區機櫃寬 ≥800 mm。NetBox `FrontPort/RearPort`：`(rear_port, position)` 唯一，反轉面板使 A.LC3 → B.LC10。→ `Cable.kind/awg/category`、`ChannelRule`（來源沒說回 `UNDETERMINED`）、`CHANNEL_TOO_LONG` 等五告警，接 dc-30b `Cable.route` 與 dc-29 `RackType.width_mm`。**來源分歧**：100 m 非通用常數；interconnect 定義疑點；連接點是否含設備端插孔所有來源皆未說。wc -m 9503 |
