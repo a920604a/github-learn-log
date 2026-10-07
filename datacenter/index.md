@@ -47,9 +47,10 @@ started: 2026-07-28
 | 項目 | 狀態 |
 |---|---|
 | 佇列總數 | 73（2026-09-28 從 dc-30 拆出 `dc-30b` 線槽走線架；2026-09-21 從 dc-26 拆出 `dc-26b` CDU 額定與可比較性；2026-09-17 從 dc-25 拆出 `dc-25b`；2026-09-07 從 dc-19 拆出 `dc-19b`） |
-| 已完成 | 45 |
+| 已完成 | 46 |
 | 目前輪次 | **第三輪：空間、消防、安全**（2026-09-24 由 [dc-28 空間層級](devices/space-hierarchy.md) 開工）。第二輪冷卻鏈 dc-17 ~ dc-27 已於 2026-09-23 完成；第一輪電力鏈 dc-01 ~ dc-16 已於 2026-09-02 全數完成 |
-| 下一張 | `dc-34` 門禁控制器、讀卡機、人員通道閘 |
+| 下一張 | `dc-35` CCTV 與影像保存 |
+| 🔴 **門是邊、鎖是電力消費者、無 DPS 全盲** | **[dc-34](devices/access-control-door-controller.md)（2026-10-07）。** Wiegand 26 位元 255×65535 = 16,711,425，(123,4567) → `10111101100010001110101110`；憑證身分鍵 (format, facility, number)。fail-safe 40 扇 × 500 mA = 20 A，不在 UPS 上則市電斷時整區開門；mantrap 5 人/分，60 人交班 12 分鐘。新告警 `DOOR_UNMONITORED`（第四個「缺東西」）。 |
 | 🔴 **釋放盤：cross-zone 讓一條迴路被隔離就使自動釋放不可達** | **[dc-33](devices/gas-suppression-release-panel.md)（2026-10-05）。** Novec 1230 `W=V/S×C/(100−C)`，288 m³／20 °C：ISO 14520（5.3%）**224.2 kg** vs NFPA 2001（4.5%）**188.8 kg**（差 19%）；85% 規則 4.505%；煙進孔到藥到位 121.7+30+10 = **161.7 s**（天真 81.6 s）。新告警 `RELEASE_PATH_DEGRADED`／`RELEASE_LOCKED_OUT`（第三個「缺東西」）。**來源分歧**：保持時間 10／5／30 分鐘、NFPA vs ISO 濃度與洩漏模型；NFPA／ISO 原文與台灣法規未取得。W40 交辦的 `core.py`／`rack.py` 收斂放進練習第 0 步 |
 | 🔴 **夾層裡的三個租客（W40 母題）** | **[2026-W40 週報](weekly/2026-W40.md)（4 張卡、09-30 無卡）。** 地板下夾層同時被送風（dc-30）、線槽（dc-30b）、取樣管（dc-32）佔用，卻沒有聚合物件替它負責；dc-30b 槽長 → dc-31 `perm_max` 是第一條跨卡**數值依賴**（同一條 80 m 固定線，10 m 跳線 OK、15 m 跳線 VIOLATED）。**連貫性檢視**：🔴1 `Rack` 合一只合一半（dc-30 缺 `mounts`，dc-31 加分題的 `Rack.mount` 落空）；🔴2 `Check` 四份副本；🔴3 `Sourced` 文字要求、骨架規則表全是裸 dict。三項排進 dc-33 練習第 0 步（建 `core.py`／`rack.py`）。🟡 `outer_w_mm` vs `width_mm`、`NemaClass` 跨距缺分支、`Alert` vs `Finding` 撞名。間隔複習：dc-25（W38）、dc-18（W36） |
 | 🔴 **VESDA 是取樣網路不是感測器** | **[dc-32](devices/vesda-aspirating-smoke-detection.md)（2026-10-02）。** 孔稀釋：單孔等效靈敏度 = 門檻×N/k（80 孔、0.1 %obs/m → 單孔要 8.0 %obs/m）；傳輸時間理想化推導 t=(L·A/Q)·H_N，60 m／30 L/min／10 孔 天真 41.6 s、修正後 121.7 s（假設值，不可設計用）。新 Finding `DETECTION_COVERAGE_GAP`（第二個「缺東西」告警）；來源分歧：傳輸時間上限 60／90／120 s 三套說法，標準原文未取得、不裁決 |
