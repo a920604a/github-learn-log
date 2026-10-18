@@ -1050,6 +1050,7 @@ updated: 2026-10-16
            未查證：modbus.org 兩份規範 PDF 抓取失敗（全卡數字來自 Wikipedia／umodbus／單一二手站）；T1.5/T3.5 固定值的適用邊界、嵌入式連線上限 4–32 與閘道延遲 5–50 ms（單一來源）、台灣法規與 CNS、設備實際回應延遲。 -->
       <!-- 2026-10-16 wc -m 見 commit；驗收表 16 列已用參考實作跑過。 -->
 - [ ] `dc-42` BACnet 物件模型與 MS/TP vs IP
+      <!-- 2026-10-18 W42 週報交辦（練習第 0 步，約 25 分鐘，先做再算 BACnet）：(1) `core.py`：只保留 `Check.UNDETERMINED`，以 `Result.reason`（MISSING_INPUT／UNSOURCED／PRECISION_INSUFFICIENT／ORDER_AMBIGUOUS）區分，`Point.quality` 的 UNCERTAIN 改 SUSPECT；(2) 單一 `points.py`：`Point(id, asset_id, role, protocol, native_ref, interval_s, last_attempt_ts_s, last_good_ts_s, quality, time_basis, clock_id)`，`role ∈ {measure, status, command}`（AI/BI→measure/status、AO/BO→command，Modbus 的 table/fc 放 native_ref），`Equip` 一律改 `Asset`，`live()` 看 quality 與 last_good。dc-43 再做 `Coverage`＋`effective()`。詳見 weekly/2026-W42.md 連貫性檢視。W41 的收斂清單沒被 dc-37~41 接住（本表當時未註記），這次寫在這裡。 -->
 - [ ] `dc-43` SNMP 與 MIB（UPS / rack PDU 常見 OID）
 - [ ] `dc-44` Redfish / IPMI 伺服器帶外管理
 - [ ] `dc-45` 閘道器與協定轉換（protocol gateway）
