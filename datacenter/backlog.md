@@ -1083,7 +1083,9 @@ updated: 2026-10-19
       <!-- 2026-10-23 來源分歧：實測／銘牌比 57.8%（Fan）vs ≤80%、網通 30%、PC 2–4 倍（LBNL 引文）；McFarlane「40–60% high」兩種讀法（62.5–71.4% vs 40–60%）；NetBox 文件寫 watts、程式 docstring 寫 VA；緩衝 15–20%（Intel）vs 25%（NEC 220.87）。
            未查證：台灣屋內線路裝置規則條文、Fan 2007 後世代（GPU）比值、NetBox maximum_draw 官方語意。wc -m = 9962（初稿 10149 → 壓縮措辭，未拆卡）。另：dc-45 前一輪未 commit，本輪一併補 commit。 -->
 - [ ] `topic-02` 斷路器 80% 連續負載規則
+      <!-- 2026-10-25 W43 週報交辦（練習第 0 步，約 20 分鐘，先做再算 80%）：(1) `core.py` 的 `Finding` 定形：`Finding(code, subject_kind, subject_id, result: Result, kind: FindingKind)`，`FindingKind ∈ {VIOLATION, MISSING_PROTECTION, DATA_QUALITY, FACT}`，刪 `space_id`；`from_uncovered(code, subject_kind, pairs)`；所有 `check_*` 一律回 `list[Finding]`，不再回 `(code, id)` 元組（W41 🔴1 起第三週）。(2) 改名：`bacnet.effective` → `effective_command`；coverage 的 `@kind` decorator → `@observer_kind`；dc-45 `quality()` → `quality_of(read, gw) -> Quality`（hold-last 無訊號回 SUSPECT，不回 Result）。本卡的 80% 檢查天然產出 VIOLATION 與 DATA_QUALITY 兩種 kind，用驗收表各釘一列。詳見 weekly/2026-W43.md 連貫性 🔴1、🔴3。 -->
 - [ ] `topic-03` N / N+1 / 2N / 2N+1 的精確定義與差異
+      <!-- 2026-10-25 W43 週報交辦（練習第 0 步，約 20 分鐘）：(1) `points.py` 回寫本週長出的欄位：`TimeBasis{POLL, DEVICE, GATEWAY_POLL}` 取代自由字串；`Aggregation(stat, window_s)`（dc-44 的 aggregation.kind 改 stat），topic-01 MEASURED 的 basis 共用它；dc-44 `Point.side` 改 `tap ∈ {psu_input, psu_output}`（避免與 Figure.side 撞名）；`resolution`、`range_max`；`via: tuple[HopRef(kind, id)]`，kind 含 gateway／bus／trunk／subnet／mgmt_net／collector／trap_receiver／credential_set；`age_bound_s()` 改函式不存欄位。(2) `Reason` 新增 `VALIDITY_UNSIGNALED`（hold-last）與 `SATURATED`（讀值 = range_max，只知下界）；dc-44 side 未知改 MISSING_INPUT。冗餘定義卡正好用來寫「觀察路徑的單點」查詢（W43 Q5）。詳見 weekly/2026-W43.md 連貫性 🔴2、🟡4。 -->
 - [ ] `topic-04` 擱置容量 stranded capacity 的四種型態
 - [ ] `topic-05` Tier I–IV 定義與 concurrent maintainability
 - [ ] `topic-06` 故障域 fault domain 的建模方式
