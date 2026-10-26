@@ -6,3 +6,4 @@
 
 - [氣流管理的度量（λ / RTI / RCI、合規判準 vs 指數判準、差壓設定值）](airflow-management-metrics.md) — `dc-25b`，2026-09-18
 - [銘牌值 vs 降載值 vs 實測值（再加一個配額值：四種數字、兩個方向）](nameplate-derated-measured.md) — `topic-01`，2026-10-23，第五輪開工
+- [斷路器 80% 連續負載規則（125% 與 80% 只在全連續時相等）](breaker-80-percent-continuous-load.md) — `topic-02`，2026-10-26
